@@ -1,1 +1,852 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IGNIS RENOVAT</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Special+Elite&family=Cutive+Mono&family=UnifrakturMaguntia&family=Source+Code+Pro:wght@400;700&family=EB+Garamond:ital,wght@0,400;0,700;1,400&display=swap');
 
+  :root {
+    --bg: #0a0a0a;
+    --bg2: #111;
+    --red: #8B0000;
+    --bright-red: #cc0000;
+    --gold: #c9a84c;
+    --dim: #555;
+    --text: #b0a890;
+    --highlight: #e8d5a3;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'EB Garamond', serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: repeating-linear-gradient(
+      transparent, transparent 2px,
+      rgba(0,0,0,0.12) 2px, rgba(0,0,0,0.12) 4px
+    );
+    pointer-events: none;
+    z-index: 1000;
+  }
+
+  @keyframes flicker {
+    0%, 95%, 100% { opacity: 1; }
+    96% { opacity: 0.4; }
+    97% { opacity: 0.9; }
+    98% { opacity: 0.3; }
+  }
+
+  @keyframes pulse-red {
+    0%, 100% { text-shadow: 0 0 10px rgba(139,0,0,0.5); }
+    50% { text-shadow: 0 0 30px rgba(204,0,0,0.8), 0 0 60px rgba(139,0,0,0.3); }
+  }
+
+  @keyframes burn-in {
+    0% { opacity: 0; filter: blur(10px) brightness(3); }
+    50% { opacity: 0.8; filter: blur(2px) brightness(1.5); }
+    100% { opacity: 1; filter: blur(0) brightness(1); }
+  }
+
+  @keyframes candleflicker {
+    0%, 100% { opacity: 0.85; transform: scale(1); }
+    25% { opacity: 0.75; transform: scale(1.02); }
+    50% { opacity: 0.9; transform: scale(0.98); }
+    75% { opacity: 0.8; transform: scale(1.01); }
+  }
+
+  /* ---- MUSIC BUTTON ---- */
+  .music-btn {
+    position: fixed;
+    bottom: 1.5rem;
+    right: 1.5rem;
+    z-index: 2000;
+    background: var(--bg2);
+    border: 1px solid var(--red);
+    color: var(--red);
+    font-family: 'Cutive Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.2em;
+    padding: 0.6rem 1.2rem;
+    cursor: pointer;
+    transition: all 0.3s;
+    text-transform: uppercase;
+  }
+  .music-btn:hover {
+    background: var(--red);
+    color: var(--highlight);
+  }
+  .music-btn.playing {
+    animation: pulse-red 3s infinite;
+  }
+
+  /* ---- HERO ---- */
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    position: relative;
+    padding: 2rem;
+    background:
+      radial-gradient(ellipse at 30% 20%, rgba(139,0,0,0.12) 0%, transparent 50%),
+      radial-gradient(ellipse at 70% 80%, rgba(139,0,0,0.08) 0%, transparent 40%),
+      var(--bg);
+  }
+
+  .hero-symbol {
+    font-size: clamp(4rem, 10vw, 7rem);
+    animation: candleflicker 4s ease-in-out infinite;
+    margin-bottom: 1rem;
+  }
+
+  .hero h1 {
+    font-family: 'UnifrakturMaguntia', serif;
+    font-size: clamp(2.5rem, 7vw, 5rem);
+    color: var(--gold);
+    letter-spacing: 0.15em;
+    text-shadow: 0 0 40px rgba(201,168,76,0.3);
+    animation: burn-in 2s ease-out;
+  }
+
+  .hero .subtitle {
+    font-family: 'Cutive Mono', monospace;
+    font-size: clamp(0.75rem, 1.8vw, 1rem);
+    color: var(--red);
+    letter-spacing: 0.5em;
+    text-transform: uppercase;
+    margin-top: 1rem;
+    animation: flicker 4s infinite;
+  }
+
+  .hero .scroll-hint {
+    position: absolute;
+    bottom: 2rem;
+    color: var(--dim);
+    font-family: 'Cutive Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.3em;
+    animation: flicker 5s infinite;
+  }
+
+  /* ---- SECTION STYLES ---- */
+  .section {
+    max-width: 750px;
+    margin: 0 auto;
+    padding: 4rem 2rem;
+    position: relative;
+  }
+
+  .section::before {
+    content: '';
+    position: absolute;
+    left: 50%;
+    top: 0;
+    width: 1px;
+    height: 50px;
+    background: linear-gradient(transparent, var(--red), transparent);
+  }
+
+  .section-number {
+    font-family: 'Cutive Mono', monospace;
+    font-size: 0.7rem;
+    color: var(--red);
+    letter-spacing: 0.5em;
+    text-transform: uppercase;
+    margin-bottom: 0.5rem;
+  }
+
+  h2 {
+    font-family: 'UnifrakturMaguntia', serif;
+    font-size: clamp(1.8rem, 4vw, 2.5rem);
+    color: var(--gold);
+    margin-bottom: 2rem;
+    text-shadow: 0 0 20px rgba(201,168,76,0.2);
+  }
+
+  p {
+    line-height: 2;
+    margin-bottom: 1.5rem;
+    font-size: clamp(1rem, 1.8vw, 1.1rem);
+  }
+
+  .emphasis { color: var(--highlight); }
+
+  .redacted {
+    background: var(--bright-red);
+    color: var(--bright-red);
+    padding: 0 4px;
+    cursor: help;
+    transition: all 0.5s;
+    user-select: none;
+  }
+  .redacted:hover {
+    color: var(--highlight);
+    background: transparent;
+    text-shadow: 0 0 10px rgba(232,213,163,0.5);
+  }
+
+  .classified {
+    border: 1px solid var(--red);
+    padding: 0.2em 0.7em;
+    font-family: 'Cutive Mono', monospace;
+    font-size: 0.65em;
+    color: var(--red);
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    display: inline-block;
+    transform: rotate(-2deg);
+    margin-left: 1rem;
+  }
+
+  /* ---- QUOTE BLOCKS ---- */
+  .quote-block {
+    border-left: 3px solid var(--red);
+    padding: 1.5rem 2rem;
+    margin: 2rem 0;
+    background: rgba(139,0,0,0.06);
+    position: relative;
+    font-style: italic;
+  }
+
+  .quote-block::before {
+    content: '\00AB';
+    font-family: 'UnifrakturMaguntia', serif;
+    font-size: 3rem;
+    color: var(--red);
+    position: absolute;
+    top: -0.5rem;
+    left: 0.5rem;
+    opacity: 0.3;
+  }
+
+  .quote-attr {
+    display: block;
+    text-align: right;
+    color: var(--dim);
+    font-style: normal;
+    font-size: 0.85rem;
+    margin-top: 0.5rem;
+    font-family: 'Cutive Mono', monospace;
+  }
+
+  /* ---- EVIDENCE BOX ---- */
+  .evidence {
+    background: var(--bg2);
+    border: 1px solid #2a2a2a;
+    padding: 2rem;
+    margin: 2rem 0;
+    position: relative;
+  }
+
+  .evidence::before {
+    content: 'BEVISSTYKKE';
+    position: absolute;
+    top: -0.7rem;
+    left: 1rem;
+    background: var(--bg);
+    padding: 0 0.5rem;
+    font-family: 'Cutive Mono', monospace;
+    font-size: 0.65rem;
+    color: var(--red);
+    letter-spacing: 0.4em;
+  }
+
+  .evidence-content {
+    font-family: 'Source Code Pro', monospace;
+    font-size: 0.85rem;
+    color: var(--highlight);
+    line-height: 1.7;
+  }
+
+  /* ---- WARNING BANNER ---- */
+  .warning {
+    background: repeating-linear-gradient(
+      45deg, transparent, transparent 10px,
+      rgba(139,0,0,0.08) 10px, rgba(139,0,0,0.08) 20px
+    );
+    border: 1px solid rgba(139,0,0,0.5);
+    padding: 1.2rem 2rem;
+    margin: 2.5rem 0;
+    text-align: center;
+  }
+
+  .warning-text {
+    font-family: 'Cutive Mono', monospace;
+    color: var(--bright-red);
+    font-size: 0.75rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+  }
+
+  /* ---- CONNECTION MAP ---- */
+  .connection-map {
+    background: rgba(139,0,0,0.04);
+    border: 1px solid rgba(139,0,0,0.2);
+    padding: 2rem;
+    margin: 3rem 0;
+    text-align: center;
+  }
+
+  .connection-map h3 {
+    font-family: 'Cutive Mono', monospace;
+    font-size: 0.75rem;
+    color: var(--red);
+    letter-spacing: 0.5em;
+    margin-bottom: 1.5rem;
+  }
+
+  .connection-nodes {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+  }
+
+  .node {
+    border: 1px solid var(--gold);
+    padding: 0.6rem 1.2rem;
+    font-family: 'Cutive Mono', monospace;
+    font-size: 0.8rem;
+    color: var(--gold);
+  }
+
+  .node-link {
+    color: var(--red);
+    font-size: 1.5rem;
+    animation: candleflicker 3s infinite;
+  }
+
+  /* ---- TSHIRT INSERT ---- */
+  .artifact-insert {
+    background: #000;
+    border: 2px solid #222;
+    padding: 2rem;
+    margin: 2rem 0;
+    position: relative;
+    overflow: hidden;
+    text-align: center;
+  }
+
+  .artifact-insert .artifact-label {
+    font-family: 'Cutive Mono', monospace;
+    font-size: 0.65rem;
+    color: var(--dim);
+    letter-spacing: 0.4em;
+    text-transform: uppercase;
+    margin-bottom: 1rem;
+  }
+
+  .artifact-insert .artifact-text {
+    font-family: 'Special Elite', monospace;
+    font-size: 1.5rem;
+    color: #fff;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    text-shadow: 0 0 20px rgba(255,255,255,0.2);
+  }
+
+  .artifact-insert .artifact-note {
+    font-family: 'Cutive Mono', monospace;
+    font-size: 0.7rem;
+    color: #555;
+    margin-top: 1rem;
+    font-style: italic;
+  }
+
+  /* ---- LATIN ---- */
+  .latin {
+    font-family: 'UnifrakturMaguntia', serif;
+    color: var(--gold);
+    font-size: 1.15em;
+  }
+
+  .article-header {
+    font-family: 'Cutive Mono', monospace;
+    font-size: 0.75rem;
+    color: var(--dim);
+    border-bottom: 1px solid #1a1a1a;
+    padding-bottom: 0.5rem;
+    margin-bottom: 1.5rem;
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .timestamp {
+    font-family: 'Source Code Pro', monospace;
+    font-size: 0.7rem;
+    color: var(--dim);
+  }
+
+  .divider {
+    text-align: center;
+    padding: 3rem 0;
+    color: var(--red);
+    font-size: 1.2rem;
+    letter-spacing: 1em;
+    opacity: 0.4;
+  }
+
+  .burn-stamp {
+    display: inline-block;
+    border: 2px solid var(--red);
+    padding: 0.5rem 2rem;
+    color: var(--red);
+    font-family: 'Cutive Mono', monospace;
+    font-size: 0.75rem;
+    letter-spacing: 0.5em;
+    transform: rotate(-3deg);
+    margin: 2rem 0;
+    animation: pulse-red 4s infinite;
+  }
+
+  .footer {
+    text-align: center;
+    padding: 4rem 2rem;
+    border-top: 1px solid #1a1a1a;
+  }
+
+  .footer p {
+    font-family: 'Cutive Mono', monospace;
+    font-size: 0.65rem;
+    color: var(--dim);
+    letter-spacing: 0.3em;
+  }
+
+  @media (max-width: 600px) {
+    .section { padding: 3rem 1.2rem; }
+    .evidence { padding: 1.2rem; }
+    .connection-nodes { flex-direction: column; }
+    .article-header { flex-direction: column; }
+  }
+</style>
+</head>
+<body>
+
+<button class="music-btn" id="musicBtn" onclick="toggleMusic()">&#9834; CHORAL</button>
+
+<!-- ==================== HERO ==================== -->
+<div class="hero">
+  <div class="hero-symbol">&#x1F56F;&#xFE0F;</div>
+  <h1>Ignis Renovat</h1>
+  <div class="subtitle">Ilden fornyer &bull; Ilden renser &bull; Ilden kaller</div>
+  <div class="scroll-hint">[ SCROLL NED ]</div>
+</div>
+
+<!-- ==================== PROLOG ==================== -->
+<div class="section">
+  <div class="section-number">Kapittel I</div>
+  <h2>Innledning</h2>
+
+  <div class="article-header">
+    <span>DOKUMENT #001</span>
+    <span class="timestamp">Sist endret: 23:47</span>
+  </div>
+
+  <p>
+    De kaller det en &laquo;hendelse&raquo;. En &laquo;uheldig episode&raquo;.
+    En beklagelig teknisk feil i B-fl&oslash;yen ved Sl&aring;tthaug.
+  </p>
+  <p>
+    Vi &mdash; forfatterne av dette dokumentet &mdash; vet bedre. Vi s&aring; det.
+    Vi <em>forsto</em> det. Og i det &oslash;yeblikket r&oslash;yken steg fra det
+    forsømte toalettet, kjente vi begge den samme f&oslash;lelsen:
+  </p>
+  <p>
+    <span class="emphasis">Endelig.</span>
+  </p>
+  <p>
+    Vi fant hverandre i ukene etter brannen. To kollegaer som aldri hadde snakket
+    ordentlig sammen &mdash; p&aring; tross av &aring;r i det samme personalrommet.
+    En som alltid hadde sett ilden i historien. En som alltid hadde kjent ilden i
+    musikken, i gatene, i motstanden. Vi s&aring; brannen i B-fl&oslash;yen og
+    kjente den samme resonansen. Den samme takknemligheten.
+  </p>
+  <p>
+    Dette er ikke en bekjennelse. Det er en <span class="emphasis">hyllest</span>.
+  </p>
+
+  <div class="quote-block">
+    Noen handlinger trenger ikke gjerningsmenn for &aring; f&aring; mening.
+    Noen ganger er det nok at noen <em>forst&aring;r</em>.
+    <span class="quote-attr">&mdash; Fra v&aring;re samtaler, personalrommet, sen h&oslash;st</span>
+  </div>
+</div>
+
+<div class="divider">&bull; &bull; &bull; &#x271D; &bull; &bull; &bull;</div>
+
+<!-- ==================== HISTORIENS LEKSJON ==================== -->
+<div class="section">
+  <div class="section-number">Kapittel II</div>
+  <h2>Den Historiske Flammen</h2>
+
+  <div class="article-header">
+    <span>STEMME I</span>
+    <span class="classified">FORTROLIG</span>
+  </div>
+
+  <p>
+    I juli &aring;r 64 brant Roma i seks dager. Keiser Nero &mdash; historiens mest
+    misforst&aring;tte leder &mdash; ble beskyldt for &aring; ha tent p&aring;.
+    Myten sier han spilte lyra mens byen brant. Sannheten er mer interessant.
+  </p>
+  <p>
+    Nero brukte brannen. Han s&aring; muligheten der andre bare s&aring; aske. P&aring;
+    ruinene reiste han <span class="latin">Domus Aurea</span> &mdash; Det Gylne Hus
+    &mdash; et mesterverk som aldri kunne eksistert uten flammene f&oslash;rst.
+  </p>
+  <p>
+    Jeg har undervist om dette i &aring;revis. Jeg har stått foran klasserom og forklart
+    hvordan sivilisasjoner m&aring; falle for &aring; reise seg igjen. Elevene nikker.
+    De skriver notater. De forst&aring;r det som abstraksjon.
+  </p>
+  <p>
+    Men da r&oslash;yken steg fra B-fl&oslash;yen, forsto <em>jeg</em> det for f&oslash;rste
+    gang som noe konkret. Der stod det &mdash; det forsømte, glemte, ignorerte toalettet
+    som ingen hadde investert i p&aring; &aring;r &mdash; og det <em>brant</em>. Og jeg
+    kjente noe jeg ikke burde ha kjent.
+  </p>
+  <p>
+    <span class="emphasis">Tilfredsstillelse.</span>
+  </p>
+
+  <div class="evidence">
+    <div class="evidence-content">
+      Roma, &aring;r 64: Brann &rarr; Domus Aurea &rarr; Fornyelse<br>
+      Sl&aring;tthaug, &aring;r 2025: Brann &rarr; ... &rarr; ?<br><br>
+      Toalettet ble aldri erstattet.<br>
+      Nero ville v&aelig;rt skuffet.
+    </div>
+  </div>
+
+  <p>
+    Jeg &oslash;nsker ikke &aring; ta &aelig;ren for noe jeg ikke har gjort. Men jeg
+    nekter &aring; fordømme det. Noen ganger handler det ikke om hvem som tent
+    fyrstikken. Det handler om hvem som forsto hvorfor den <em>burde</em> tennes.
+  </p>
+
+  <div class="quote-block">
+    <span class="latin">Quod me nutrit, me destruit.</span><br>
+    Det som n&aelig;rer meg, &oslash;delegger meg. Men den som forst&aring;r &oslash;deleggelsen,
+    forst&aring;r ogs&aring; n&aelig;ringen.
+    <span class="quote-attr">&mdash; Stemme I</span>
+  </div>
+</div>
+
+<div class="divider">&bull; &bull; &bull; &#x271D; &bull; &bull; &bull;</div>
+
+<!-- ==================== DEN POLITISKE FLAMMEN ==================== -->
+<div class="section">
+  <div class="section-number">Kapittel III</div>
+  <h2>Den Politiske Flammen</h2>
+
+  <div class="article-header">
+    <span>STEMME II</span>
+    <span class="classified">UKONTROLLERT</span>
+  </div>
+
+  <p>
+    Min kollega snakker om Roma. Om keisere og gylne hus. Fint. Jeg snakker om
+    noe annet: om <span class="emphasis">strukturer som fortjener &aring; falle</span>.
+  </p>
+  <p>
+    Jeg har brukt karrieren min p&aring; &aring; forst&aring; hvordan makt fungerer.
+    Hvordan institusjoner former mennesker. Hvordan systemer opprettholder seg selv
+    &mdash; ikke fordi de er gode, men fordi ingen t&oslash;r &aring; gj&oslash;re
+    motstand. Sosiologien l&aelig;rer oss at endring aldri kommer innenfra. Den
+    m&aring; <em>tvinges</em> frem.
+  </p>
+  <p>
+    Brannen i B-fl&oslash;yen var ikke h&aelig;rverk. Den var en
+    <span class="emphasis">strukturkritikk levert i det eneste spr&aring;ket
+    institusjoner forst&aring;r</span>: konsekvenser.
+  </p>
+
+  <div class="artifact-insert">
+    <div class="artifact-label">GJENSTAND FUNNET P&Aring; PERSONALROMMET // TILH&Oslash;RER STEMME II</div>
+    <div class="artifact-text">GRIND THE NAZI SCUM</div>
+    <div class="artifact-note">Festival-t-skjorte. Brukt jevnlig. Ingen har noensinne kommentert den.</div>
+  </div>
+
+  <p>
+    Folk sp&oslash;r meg noen ganger hvorfor jeg h&oslash;rer p&aring; &laquo;s&aring;nn
+    musikk&raquo;. Musikk der trommene l&aring;ter som maskingeværild og gitarene som
+    sirener. Fordi den er <span class="emphasis">&aelig;rlig</span>. Den later ikke som
+    verden er harmonisk. Den sier det h&oslash;yt: <em>noe er galt, og vi nekter &aring;
+    v&aelig;re stille om det</em>.
+  </p>
+  <p>
+    Jeg tente ikke p&aring; toalettet. Men da jeg stod der i korridoren og s&aring;
+    r&oslash;yken, h&oslash;rte jeg den samme frekvensen. Den samme tonen. Som n&aring;r
+    en sang treffer riktig &mdash; ikke melodisk, men <em>strukturelt</em>. Noe som
+    hadde v&aelig;rt galt lenge, ble endelig synlig.
+  </p>
+  <p>
+    Historikeren fant sin ild i antikken. Jeg fant min p&aring; festivaler p&aring;
+    <span class="redacted">Vestlandet</span>, i bøker om maktstrukturer, i klasserom
+    der jeg pr&oslash;ver &aring; f&aring; elever til &aring; stille sp&oslash;rsm&aring;l
+    ingen vil h&oslash;re.
+  </p>
+
+  <div class="quote-block">
+    Man trenger ikke &aring; tenne en flamme for &aring; v&aelig;re dens vokter.
+    Noen ganger er det nok &aring; nekte &aring; slukke den.
+    <span class="quote-attr">&mdash; Stemme II</span>
+  </div>
+</div>
+
+<div class="divider">&bull; &bull; &bull; &#x271D; &bull; &bull; &bull;</div>
+
+<!-- ==================== KONVERGENSEN ==================== -->
+<div class="section">
+  <div class="section-number">Kapittel IV</div>
+  <h2>Konvergensen</h2>
+
+  <div class="article-header">
+    <span>FELLES TEKST</span>
+    <span class="classified">OPERATIVT</span>
+  </div>
+
+  <p>
+    Vi m&oslash;ttes &mdash; virkelig m&oslash;ttes &mdash; f&oslash;rst etter brannen.
+    Det er viktig &aring; forst&aring; det. F&oslash;r brannen var vi bare to kollegaer
+    som passerte hverandre i gangen. Etter brannen ble vi noe mer.
+  </p>
+  <p>
+    Det begynte med en kommentar i personalrommet. En av oss sa, lavt, nesten for seg
+    selv: &laquo;Det toalettet hadde fortjent det lenge.&raquo; Den andre h&oslash;rte det.
+    S&aring; p&aring; ham. Og smilte.
+  </p>
+  <p>
+    Der startet samtalen som ble dette manifestet.
+  </p>
+
+  <div class="warning">
+    <div class="warning-text">
+      &star; VI FORDØMMER IKKE. VI FORST&Aring;R. &star;
+    </div>
+  </div>
+
+  <p>
+    Vi vet ikke hvem som tente p&aring; toalettet. Vi vil ikke vite det. &Aring; vite det
+    ville &oslash;delegge det. For &oslash;yeblikket man setter et navn p&aring; en
+    handling, reduserer man den til en <em>person</em>. Og dette var st&oslash;rre enn
+    en person.
+  </p>
+  <p>
+    Brannen i B-fl&oslash;yen var et <span class="emphasis">symptom</span>. Et svar fra
+    bygget selv. Fra &aring;revis med forsømmelse. Fra budsjetter som aldri ble brukt
+    p&aring; det som trengte det mest. Fra en ledelse som &mdash; og her ser vi p&aring;
+    hverandre &mdash; like etterpå <span class="redacted">forlot skolen</span> uten &aring;
+    noensinne svare for det som hadde f&aring;tt forfalle.
+  </p>
+  <p>
+    Vise-rektoren sa &laquo;Stig p&aring;&raquo; da noen banket p&aring; d&oslash;ren hans
+    for &aring; melde om r&oslash;yken. &laquo;Stig p&aring;&raquo; &mdash; som om
+    brannen var en gjest. Som om den var velkommen.
+  </p>
+  <p>
+    Kanskje var den det.
+  </p>
+
+  <div class="connection-map">
+    <h3>TO STEMMER &mdash; &Eacute;N FORST&Aring;ELSE</h3>
+    <div class="connection-nodes">
+      <div class="node">HISTORIKEREN<br><span style="font-size:0.65rem;color:var(--dim)">Forst&aring;r fortiden</span></div>
+      <div class="node-link">&#x1F56F;&#xFE0F;</div>
+      <div class="node">AKTIVISTEN<br><span style="font-size:0.65rem;color:var(--dim)">Forst&aring;r strukturen</span></div>
+    </div>
+    <p style="margin-top:1.5rem;font-size:0.85rem;color:var(--dim);font-family:'Cutive Mono',monospace;">
+      &Eacute;n s&aring; det i antikken. &Eacute;n s&aring; det i samfunnet.<br>
+      Begge s&aring; det i r&oslash;yken fra B-fl&oslash;yen.
+    </p>
+  </div>
+</div>
+
+<div class="divider">&bull; &bull; &bull; &#x271D; &bull; &bull; &bull;</div>
+
+<!-- ==================== DET VI VET ==================== -->
+<div class="section">
+  <div class="section-number">Kapittel V</div>
+  <h2>Det Vi Vet</h2>
+
+  <div class="article-header">
+    <span>OBSERVASJONER</span>
+    <span class="timestamp">Nedtegnet i ettertid</span>
+  </div>
+
+  <p>
+    Vi var til stede da det skjedde. Som alle andre. Vi stod i korridoren og s&aring;
+    r&oslash;yken. Vi h&oslash;rte brannalarmen. Vi s&aring; vaktmesteren komme l&oslash;pende
+    med en halv br&oslash;dskive i hånden.
+  </p>
+  <p>
+    Men vi s&aring; noe de andre ikke s&aring;. Vi s&aring;
+    <span class="emphasis">mening</span>.
+  </p>
+
+  <div class="evidence">
+    <div class="evidence-content">
+      Det vi observerte:<br><br>
+      &mdash; Toalettet hadde v&aelig;rt forsømt i &aring;revis. Kjent for alle.<br>
+      &mdash; Ingen reagerte p&aring; klager. Dokumentert av tillitsvalgt.<br>
+      &mdash; Brannen spredte seg mer enn noen forventet.<br>
+      &nbsp;&nbsp;&nbsp;&nbsp;Det sier noe om byggets tilstand.<br>
+      &mdash; Ledelsen sendte e-post: &laquo;Vi har kontroll.&raquo;<br>
+      &nbsp;&nbsp;&nbsp;&nbsp;De hadde ikke kontroll. De har aldri hatt kontroll.<br>
+      &mdash; Toalettet ble aldri erstattet.<br>
+      &mdash; Rektor forlot skolen kort tid etter.<br><br>
+      Vi noterer. Vi husker. Vi <span style="color:var(--bright-red)">glemmer ikke</span>.
+    </div>
+  </div>
+
+  <p>
+    Hadde vi kunnet planlegge dette selv, ville vi ha gjort det annerledes. Mer
+    kontrollert. Mer symbolsk. Kanskje med en lapp p&aring; d&oslash;ren:
+    <span class="latin">Ignis Renovat</span>. Men det er jo nettopp poenget &mdash;
+    ilden trenger ikke en plan. Den trenger bare et forsømt rom og nok tid.
+  </p>
+  <p>
+    Noen ganger skriver historien seg selv. Vi er bare de som leste den høyt.
+  </p>
+</div>
+
+<div class="divider">&bull; &bull; &bull; &#x271D; &bull; &bull; &bull;</div>
+
+<!-- ==================== CREDO ==================== -->
+<div class="section">
+  <div class="section-number">Epilog</div>
+  <h2>Credo</h2>
+
+  <p style="text-align:center; font-size:1.15rem; color:var(--gold); line-height:2.4; font-family:'EB Garamond',serif;">
+    Vi tror p&aring; ilden som l&aelig;remester.<br>
+    Vi tror p&aring; Nero som visjon&aelig;r.<br>
+    Vi tror p&aring; motstand som n&oslash;dvendighet.<br>
+    Vi tror p&aring; at det som er r&aring;ttent, m&aring; synliggj&oslash;res.<br>
+    Vi tror p&aring; <span class="latin">Ignis Renovat</span>.<br><br>
+    Vi tente ikke brannen. Men vi takker den som gjorde det.<br>
+    Vi er to. Vi er l&aelig;rere. Vi er blant dere.<br>
+    Og vi ser det dere nekter &aring; se.
+  </p>
+
+  <div style="text-align:center; margin-top:3rem;">
+    <div class="burn-stamp">ILDEN HUSKER</div>
+  </div>
+</div>
+
+<!-- ==================== FOOTER ==================== -->
+<div class="footer">
+  <p>IGNIS RENOVAT &bull; EST. ANNO MMXXV</p>
+  <p style="margin-top:0.5rem;">
+    &laquo;IKKE SPØR HVEM SOM TENTE P&Aring;. SPØR HVORFOR DET TRENGTE &Aring; BRENNE.&raquo;
+  </p>
+  <p style="margin-top:1.5rem; color:#333; font-size: 0.55rem;">
+    Denne nettsiden ble funnet lagret p&aring; skolens interne nettverk.<br>
+    Opprinnelse: ukjent. Forfatter(e): ukjent. Innholdet er ikke verifisert.<br>
+    Dersom du har informasjon, kontakt etterforskningsgruppen.
+  </p>
+</div>
+
+<script>
+// Gregorian-style drone using Web Audio API
+let audioCtx, isPlaying = false, nodes = [];
+
+function createChant() {
+  audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  
+  // Base frequencies for a dark Gregorian drone (D minor-ish)
+  const freqs = [73.42, 110, 146.83, 220, 293.66]; // D2, A2, D3, A3, D4
+  const gains = [0.12, 0.08, 0.06, 0.04, 0.025];
+  
+  freqs.forEach((freq, i) => {
+    // Main oscillator
+    const osc = audioCtx.createOscillator();
+    osc.type = 'sine';
+    osc.frequency.value = freq;
+    
+    // Slow vibrato for each voice
+    const vibrato = audioCtx.createOscillator();
+    const vibratoGain = audioCtx.createGain();
+    vibrato.frequency.value = 0.15 + Math.random() * 0.2;
+    vibratoGain.gain.value = freq * 0.003;
+    vibrato.connect(vibratoGain);
+    vibratoGain.connect(osc.frequency);
+    
+    // Volume envelope
+    const gainNode = audioCtx.createGain();
+    gainNode.gain.value = 0;
+    gainNode.gain.linearRampToValueAtTime(gains[i], audioCtx.currentTime + 4);
+    
+    // Reverb-like effect using delay
+    const delay = audioCtx.createDelay();
+    delay.delayTime.value = 0.3 + i * 0.15;
+    const feedback = audioCtx.createGain();
+    feedback.gain.value = 0.3;
+    const delayGain = audioCtx.createGain();
+    delayGain.gain.value = gains[i] * 0.4;
+    
+    osc.connect(gainNode);
+    gainNode.connect(audioCtx.destination);
+    gainNode.connect(delay);
+    delay.connect(feedback);
+    feedback.connect(delay);
+    delay.connect(delayGain);
+    delayGain.connect(audioCtx.destination);
+    
+    osc.start();
+    vibrato.start();
+    
+    nodes.push({ osc, vibrato, gainNode, delay, feedback, delayGain, baseGain: gains[i] });
+  });
+  
+  // Breath-like volume modulation on the whole mix
+  function breathe() {
+    if (!isPlaying) return;
+    nodes.forEach((n, i) => {
+      const now = audioCtx.currentTime;
+      const cycle = 8 + i * 2;
+      const target = n.baseGain * (0.6 + 0.4 * Math.sin(now / cycle * Math.PI));
+      n.gainNode.gain.linearRampToValueAtTime(target, now + 2);
+    });
+    setTimeout(breathe, 2000);
+  }
+  breathe();
+}
+
+function toggleMusic() {
+  const btn = document.getElementById('musicBtn');
+  if (!isPlaying) {
+    if (!audioCtx) createChant();
+    else audioCtx.resume();
+    isPlaying = true;
+    btn.textContent = '■ SILENTIUM';
+    btn.classList.add('playing');
+  } else {
+    nodes.forEach(n => {
+      n.gainNode.gain.linearRampToValueAtTime(0, audioCtx.currentTime + 2);
+    });
+    setTimeout(() => { audioCtx.suspend(); }, 2500);
+    isPlaying = false;
+    btn.textContent = '♪ CHORAL';
+    btn.classList.remove('playing');
+  }
+}
+</script>
+
+</body>
+</html>
