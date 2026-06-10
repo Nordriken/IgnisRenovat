@@ -3,849 +3,860 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>IGNIS RENOVAT</title>
+<title>IGNIS RENOVAT — Et manifest</title>
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=Special+Elite&family=Cutive+Mono&family=UnifrakturMaguntia&family=Source+Code+Pro:wght@400;700&family=EB+Garamond:ital,wght@0,400;0,700;1,400&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=UnifrakturMaguntia&family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Cutive+Mono&display=swap');
 
-  :root {
-    --bg: #0a0a0a;
-    --bg2: #111;
-    --red: #8B0000;
-    --bright-red: #cc0000;
-    --gold: #c9a84c;
-    --dim: #555;
-    --text: #b0a890;
-    --highlight: #e8d5a3;
-  }
+:root {
+  --ink: #0d0b09;          /* brent papir-svart */
+  --panel: #15110d;        /* forkullet panel */
+  --ember: #9b1c1c;        /* glo */
+  --ember-bright: #d4502f; /* flamme */
+  --gilt: #c9a227;         /* bladgull */
+  --ash: #c9bda5;          /* aske-tekst */
+  --smoke: #6b6254;        /* røyk-grå */
+  --rule: #2a221a;
+}
 
-  * { margin: 0; padding: 0; box-sizing: border-box; }
+* { margin: 0; padding: 0; box-sizing: border-box; }
 
-  body {
-    background: var(--bg);
-    color: var(--text);
-    font-family: 'EB Garamond', serif;
-    min-height: 100vh;
-    overflow-x: hidden;
-  }
+html { scroll-behavior: smooth; }
 
-  body::before {
-    content: '';
-    position: fixed;
-    top: 0; left: 0; right: 0; bottom: 0;
-    background: repeating-linear-gradient(
-      transparent, transparent 2px,
-      rgba(0,0,0,0.12) 2px, rgba(0,0,0,0.12) 4px
-    );
-    pointer-events: none;
-    z-index: 1000;
-  }
+body {
+  background: var(--ink);
+  color: var(--ash);
+  font-family: 'EB Garamond', serif;
+  font-size: 19px;
+  line-height: 1.85;
+  overflow-x: hidden;
+}
 
-  @keyframes flicker {
-    0%, 95%, 100% { opacity: 1; }
-    96% { opacity: 0.4; }
-    97% { opacity: 0.9; }
-    98% { opacity: 0.3; }
-  }
+::selection { background: var(--ember); color: var(--ash); }
 
-  @keyframes pulse-red {
-    0%, 100% { text-shadow: 0 0 10px rgba(139,0,0,0.5); }
-    50% { text-shadow: 0 0 30px rgba(204,0,0,0.8), 0 0 60px rgba(139,0,0,0.3); }
-  }
+/* ---------- LUNTE (scroll progress) ---------- */
+.fuse {
+  position: fixed; top: 0; left: 0; right: 0;
+  height: 3px; z-index: 3000;
+  background: var(--rule);
+}
+.fuse-burn {
+  height: 100%; width: 0%;
+  background: linear-gradient(90deg, #3d1208, var(--ember) 60%, var(--ember-bright));
+  position: relative;
+  transition: width .1s linear;
+}
+.fuse-burn::after {
+  content: '';
+  position: absolute; right: -4px; top: 50%;
+  width: 9px; height: 9px; border-radius: 50%;
+  transform: translateY(-50%);
+  background: var(--ember-bright);
+  box-shadow: 0 0 12px 3px rgba(212,80,47,.8), 0 0 30px 8px rgba(212,80,47,.3);
+}
 
-  @keyframes burn-in {
-    0% { opacity: 0; filter: blur(10px) brightness(3); }
-    50% { opacity: 0.8; filter: blur(2px) brightness(1.5); }
-    100% { opacity: 1; filter: blur(0) brightness(1); }
-  }
+/* ---------- MUSIKK ---------- */
+.music-btn {
+  position: fixed; bottom: 1.4rem; right: 1.4rem; z-index: 2000;
+  background: var(--panel); border: 1px solid var(--ember);
+  color: var(--ember-bright);
+  font-family: 'Cutive Mono', monospace;
+  font-size: .68rem; letter-spacing: .25em; text-transform: uppercase;
+  padding: .65rem 1.2rem; cursor: pointer; transition: all .3s;
+}
+.music-btn:hover { background: var(--ember); color: var(--ash); }
+.music-btn:focus-visible { outline: 2px solid var(--gilt); outline-offset: 3px; }
 
-  @keyframes candleflicker {
-    0%, 100% { opacity: 0.85; transform: scale(1); }
-    25% { opacity: 0.75; transform: scale(1.02); }
-    50% { opacity: 0.9; transform: scale(0.98); }
-    75% { opacity: 0.8; transform: scale(1.01); }
-  }
+/* ---------- HERO ---------- */
+.hero {
+  min-height: 100vh;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  text-align: center; padding: 3rem 1.5rem;
+  position: relative;
+  background:
+    radial-gradient(ellipse 80% 50% at 50% 110%, rgba(155,28,28,.22), transparent 60%),
+    radial-gradient(ellipse 60% 40% at 50% -10%, rgba(201,162,39,.06), transparent 60%),
+    var(--ink);
+}
 
-  /* ---- MUSIC BUTTON ---- */
-  .music-btn {
-    position: fixed;
-    bottom: 1.5rem;
-    right: 1.5rem;
-    z-index: 2000;
-    background: var(--bg2);
-    border: 1px solid var(--red);
-    color: var(--red);
-    font-family: 'Cutive Mono', monospace;
-    font-size: 0.7rem;
-    letter-spacing: 0.2em;
-    padding: 0.6rem 1.2rem;
-    cursor: pointer;
-    transition: all 0.3s;
-    text-transform: uppercase;
-  }
-  .music-btn:hover {
-    background: var(--red);
-    color: var(--highlight);
-  }
-  .music-btn.playing {
-    animation: pulse-red 3s infinite;
-  }
+.sigil { width: 76px; height: 100px; margin-bottom: 2.2rem; }
 
-  /* ---- HERO ---- */
-  .hero {
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    position: relative;
-    padding: 2rem;
-    background:
-      radial-gradient(ellipse at 30% 20%, rgba(139,0,0,0.12) 0%, transparent 50%),
-      radial-gradient(ellipse at 70% 80%, rgba(139,0,0,0.08) 0%, transparent 40%),
-      var(--bg);
-  }
+.hero .edition {
+  font-family: 'Cutive Mono', monospace;
+  font-size: .68rem; letter-spacing: .45em; text-transform: uppercase;
+  color: var(--smoke); margin-bottom: 1.6rem;
+}
 
-  .hero-symbol {
-    font-size: clamp(4rem, 10vw, 7rem);
-    animation: candleflicker 4s ease-in-out infinite;
-    margin-bottom: 1rem;
-  }
+.hero h1 {
+  font-family: 'UnifrakturMaguntia', serif;
+  font-weight: 400;
+  font-size: clamp(3rem, 9vw, 6.4rem);
+  color: var(--gilt);
+  letter-spacing: .06em;
+  line-height: 1.05;
+  text-shadow: 0 0 60px rgba(201,162,39,.25);
+}
 
-  .hero h1 {
-    font-family: 'UnifrakturMaguntia', serif;
-    font-size: clamp(2.5rem, 7vw, 5rem);
-    color: var(--gold);
-    letter-spacing: 0.15em;
-    text-shadow: 0 0 40px rgba(201,168,76,0.3);
-    animation: burn-in 2s ease-out;
-  }
+.hero .undertitle {
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic; font-size: clamp(1.05rem, 2.4vw, 1.4rem);
+  color: var(--ash); margin-top: 1.4rem;
+}
 
-  .hero .subtitle {
-    font-family: 'Cutive Mono', monospace;
-    font-size: clamp(0.75rem, 1.8vw, 1rem);
-    color: var(--red);
-    letter-spacing: 0.5em;
-    text-transform: uppercase;
-    margin-top: 1rem;
-    animation: flicker 4s infinite;
-  }
+.hero .authors {
+  font-family: 'Cutive Mono', monospace;
+  font-size: .7rem; letter-spacing: .35em; text-transform: uppercase;
+  color: var(--ember-bright); margin-top: 2.6rem;
+}
 
-  .hero .scroll-hint {
-    position: absolute;
-    bottom: 2rem;
-    color: var(--dim);
-    font-family: 'Cutive Mono', monospace;
-    font-size: 0.7rem;
-    letter-spacing: 0.3em;
-    animation: flicker 5s infinite;
-  }
+.hero .descend {
+  position: absolute; bottom: 2.2rem;
+  font-family: 'Cutive Mono', monospace;
+  font-size: .62rem; letter-spacing: .4em; color: var(--smoke);
+}
 
-  /* ---- SECTION STYLES ---- */
-  .section {
-    max-width: 750px;
-    margin: 0 auto;
-    padding: 4rem 2rem;
-    position: relative;
-  }
+/* ---------- STRUKTUR ---------- */
+.leaf {
+  max-width: 660px; margin: 0 auto;
+  padding: 5.5rem 1.6rem 2rem;
+  position: relative;
+}
 
-  .section::before {
-    content: '';
-    position: absolute;
-    left: 50%;
-    top: 0;
-    width: 1px;
-    height: 50px;
-    background: linear-gradient(transparent, var(--red), transparent);
-  }
+.chapter-mark {
+  text-align: center; margin-bottom: 2.6rem;
+}
+.chapter-mark .ordinal {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: .85rem; letter-spacing: .55em; text-transform: uppercase;
+  color: var(--ember-bright);
+  display: block; margin-bottom: .7rem;
+}
+.chapter-mark h2 {
+  font-family: 'Cormorant Garamond', serif;
+  font-weight: 600; font-style: italic;
+  font-size: clamp(1.7rem, 4.4vw, 2.4rem);
+  color: var(--gilt); letter-spacing: .02em;
+}
+.chapter-mark::after {
+  content: '❦';
+  display: block; margin-top: 1.1rem;
+  color: var(--ember); font-size: 1rem; opacity: .7;
+}
 
-  .section-number {
-    font-family: 'Cutive Mono', monospace;
-    font-size: 0.7rem;
-    color: var(--red);
-    letter-spacing: 0.5em;
-    text-transform: uppercase;
-    margin-bottom: 0.5rem;
-  }
+p { margin-bottom: 1.5rem; }
 
-  h2 {
-    font-family: 'UnifrakturMaguntia', serif;
-    font-size: clamp(1.8rem, 4vw, 2.5rem);
-    color: var(--gold);
-    margin-bottom: 2rem;
-    text-shadow: 0 0 20px rgba(201,168,76,0.2);
-  }
+.lede::first-letter {
+  font-family: 'UnifrakturMaguntia', serif;
+  font-size: 4.6em; float: left;
+  line-height: .78; padding: .08em .12em 0 0;
+  color: var(--ember-bright);
+}
 
-  p {
-    line-height: 2;
-    margin-bottom: 1.5rem;
-    font-size: clamp(1rem, 1.8vw, 1.1rem);
-  }
+em { font-style: italic; color: var(--ash); }
+strong { font-weight: 600; color: var(--gilt); letter-spacing: .01em; }
 
-  .emphasis { color: var(--highlight); }
+.voice-tag {
+  font-family: 'Cutive Mono', monospace;
+  font-size: .66rem; letter-spacing: .35em; text-transform: uppercase;
+  color: var(--smoke);
+  border-top: 1px solid var(--rule);
+  border-bottom: 1px solid var(--rule);
+  padding: .55rem 0; margin: 0 0 2.4rem;
+  display: flex; justify-content: space-between; gap: 1rem; flex-wrap: wrap;
+}
+.voice-tag .seal-word { color: var(--ember-bright); }
 
-  .redacted {
-    background: var(--bright-red);
-    color: var(--bright-red);
-    padding: 0 4px;
-    cursor: help;
-    transition: all 0.5s;
-    user-select: none;
-  }
-  .redacted:hover {
-    color: var(--highlight);
-    background: transparent;
-    text-shadow: 0 0 10px rgba(232,213,163,0.5);
-  }
+/* ---------- EPIGRAF ---------- */
+.epigraph {
+  text-align: center; padding: 6rem 1.6rem 1rem;
+  max-width: 560px; margin: 0 auto;
+}
+.epigraph .lat {
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic; font-size: 1.5rem; color: var(--gilt);
+  line-height: 1.7;
+}
+.epigraph .trans {
+  font-size: 1rem; color: var(--smoke); margin-top: 1rem;
+}
+.epigraph .src {
+  font-family: 'Cutive Mono', monospace;
+  font-size: .65rem; letter-spacing: .3em; color: var(--smoke);
+  margin-top: 1.4rem; text-transform: uppercase;
+}
 
-  .classified {
-    border: 1px solid var(--red);
-    padding: 0.2em 0.7em;
-    font-family: 'Cutive Mono', monospace;
-    font-size: 0.65em;
-    color: var(--red);
-    letter-spacing: 0.3em;
-    text-transform: uppercase;
-    display: inline-block;
-    transform: rotate(-2deg);
-    margin-left: 1rem;
+/* ---------- MARGINALIA ---------- */
+.note-anchor { position: relative; }
+.marginalia {
+  font-family: 'Cutive Mono', monospace;
+  font-size: .68rem; line-height: 1.6;
+  color: var(--smoke);
+  border-left: 2px solid var(--ember);
+  padding: .4rem 0 .4rem .9rem;
+  margin: 1.6rem 0 2rem;
+}
+.marginalia .hand { color: var(--ember-bright); }
+@media (min-width: 1180px) {
+  .marginalia {
+    position: absolute; left: 100%; top: 0;
+    width: 200px; margin: 0 0 0 3rem;
+    border-left-color: var(--rule);
   }
+}
 
-  /* ---- QUOTE BLOCKS ---- */
-  .quote-block {
-    border-left: 3px solid var(--red);
-    padding: 1.5rem 2rem;
-    margin: 2rem 0;
-    background: rgba(139,0,0,0.06);
-    position: relative;
-    font-style: italic;
-  }
+/* ---------- TESER ---------- */
+.theses { max-width: 720px; margin: 0 auto; padding: 5.5rem 1.6rem 2rem; }
+.thesis {
+  display: grid; grid-template-columns: 4.2rem 1fr;
+  gap: 1.4rem; align-items: baseline;
+  padding: 1.5rem 0;
+  border-bottom: 1px solid var(--rule);
+  opacity: 0; transform: translateY(14px);
+  transition: opacity .7s ease, transform .7s ease;
+}
+.thesis.lit { opacity: 1; transform: none; }
+.thesis .num {
+  font-family: 'Cormorant Garamond', serif;
+  font-weight: 500; font-size: 1.9rem;
+  color: var(--ember-bright); text-align: right;
+  font-variant-numeric: oldstyle-nums;
+}
+.thesis .body { font-size: 1.12rem; line-height: 1.75; }
+.thesis .body em { color: var(--gilt); }
+.thesis:last-child { border-bottom: none; }
 
-  .quote-block::before {
-    content: '\00AB';
-    font-family: 'UnifrakturMaguntia', serif;
-    font-size: 3rem;
-    color: var(--red);
-    position: absolute;
-    top: -0.5rem;
-    left: 0.5rem;
-    opacity: 0.3;
-  }
+/* ---------- KRAV ---------- */
+.demands { counter-reset: krav; }
+.demand {
+  counter-increment: krav;
+  position: relative;
+  padding: 1.1rem 0 1.1rem 3.4rem;
+  border-bottom: 1px dashed var(--rule);
+}
+.demand::before {
+  content: '§ ' counter(krav);
+  position: absolute; left: 0; top: 1.15rem;
+  font-family: 'Cutive Mono', monospace;
+  font-size: .8rem; color: var(--ember-bright);
+  letter-spacing: .1em;
+}
+.demand:last-child { border-bottom: none; }
 
-  .quote-attr {
-    display: block;
-    text-align: right;
-    color: var(--dim);
-    font-style: normal;
-    font-size: 0.85rem;
-    margin-top: 0.5rem;
-    font-family: 'Cutive Mono', monospace;
-  }
+/* ---------- VITNESBYRD ---------- */
+.testimony {
+  background: var(--panel);
+  border: 1px solid var(--rule);
+  padding: 2rem 2.2rem;
+  margin: 2.4rem 0;
+  position: relative;
+}
+.testimony::before {
+  content: 'NEDTEGNET';
+  position: absolute; top: -.62rem; left: 1.4rem;
+  background: var(--ink); padding: 0 .6rem;
+  font-family: 'Cutive Mono', monospace;
+  font-size: .6rem; letter-spacing: .4em; color: var(--ember-bright);
+}
+.testimony p { font-family: 'Cutive Mono', monospace; font-size: .82rem; line-height: 1.9; color: var(--ash); margin-bottom: .4rem; }
+.testimony .red { color: var(--ember-bright); }
 
-  /* ---- EVIDENCE BOX ---- */
-  .evidence {
-    background: var(--bg2);
-    border: 1px solid #2a2a2a;
-    padding: 2rem;
-    margin: 2rem 0;
-    position: relative;
-  }
+/* ---------- FOTNOTER ---------- */
+.fn-ref { color: var(--ember-bright); font-size: .75em; vertical-align: super; cursor: help; }
+.footnotes {
+  margin-top: 3rem; padding-top: 1.4rem;
+  border-top: 1px solid var(--rule);
+  font-size: .86rem; color: var(--smoke); line-height: 1.7;
+}
+.footnotes .fn { margin-bottom: .7rem; }
+.footnotes .fn b { color: var(--ember-bright); font-weight: 500; }
 
-  .evidence::before {
-    content: 'BEVISSTYKKE';
-    position: absolute;
-    top: -0.7rem;
-    left: 1rem;
-    background: var(--bg);
-    padding: 0 0.5rem;
-    font-family: 'Cutive Mono', monospace;
-    font-size: 0.65rem;
-    color: var(--red);
-    letter-spacing: 0.4em;
-  }
+/* ---------- SLADD ---------- */
+.redacted {
+  background: var(--ember); color: var(--ember);
+  padding: 0 5px; cursor: help; user-select: none;
+  transition: all .5s;
+}
+.redacted:hover { background: transparent; color: var(--gilt); }
 
-  .evidence-content {
-    font-family: 'Source Code Pro', monospace;
-    font-size: 0.85rem;
-    color: var(--highlight);
-    line-height: 1.7;
-  }
+/* ---------- CREDO ---------- */
+.credo {
+  text-align: center; max-width: 600px; margin: 0 auto;
+  padding: 5.5rem 1.6rem 2rem;
+}
+.credo p {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(1.15rem, 2.6vw, 1.45rem);
+  font-style: italic; line-height: 2.3;
+  color: var(--gilt);
+}
+.credo .plain { font-style: normal; color: var(--ash); font-size: 1.05rem; margin-top: 2rem; font-family: 'EB Garamond', serif; }
 
-  /* ---- WARNING BANNER ---- */
-  .warning {
-    background: repeating-linear-gradient(
-      45deg, transparent, transparent 10px,
-      rgba(139,0,0,0.08) 10px, rgba(139,0,0,0.08) 20px
-    );
-    border: 1px solid rgba(139,0,0,0.5);
-    padding: 1.2rem 2rem;
-    margin: 2.5rem 0;
-    text-align: center;
-  }
+/* ---------- UNDERSKRIFTER ---------- */
+.signatures {
+  display: flex; justify-content: center; gap: clamp(2rem, 8vw, 6rem);
+  padding: 3.5rem 1.6rem 1rem; flex-wrap: wrap;
+}
+.seal { text-align: center; }
+.seal svg { width: 118px; height: 118px; }
+.seal .who {
+  font-family: 'Cutive Mono', monospace;
+  font-size: .62rem; letter-spacing: .3em; color: var(--smoke);
+  margin-top: .9rem; text-transform: uppercase;
+}
 
-  .warning-text {
-    font-family: 'Cutive Mono', monospace;
-    color: var(--bright-red);
-    font-size: 0.75rem;
-    letter-spacing: 0.3em;
-    text-transform: uppercase;
-  }
+/* ---------- KOLOFON ---------- */
+.colophon {
+  max-width: 540px; margin: 0 auto;
+  padding: 4.5rem 1.6rem 6rem;
+  text-align: center;
+  font-family: 'Cutive Mono', monospace;
+  font-size: .7rem; line-height: 2.1;
+  color: var(--smoke); letter-spacing: .08em;
+}
+.colophon .flame { color: var(--ember-bright); font-size: 1rem; display: block; margin-bottom: 1.4rem; }
 
-  /* ---- CONNECTION MAP ---- */
-  .connection-map {
-    background: rgba(139,0,0,0.04);
-    border: 1px solid rgba(139,0,0,0.2);
-    padding: 2rem;
-    margin: 3rem 0;
-    text-align: center;
-  }
+.divider {
+  text-align: center; padding: 4rem 0 0;
+  color: var(--ember); letter-spacing: 1.2em; font-size: .85rem; opacity: .55;
+}
 
-  .connection-map h3 {
-    font-family: 'Cutive Mono', monospace;
-    font-size: 0.75rem;
-    color: var(--red);
-    letter-spacing: 0.5em;
-    margin-bottom: 1.5rem;
-  }
-
-  .connection-nodes {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 1.5rem;
-    flex-wrap: wrap;
-  }
-
-  .node {
-    border: 1px solid var(--gold);
-    padding: 0.6rem 1.2rem;
-    font-family: 'Cutive Mono', monospace;
-    font-size: 0.8rem;
-    color: var(--gold);
-  }
-
-  .node-link {
-    color: var(--red);
-    font-size: 1.5rem;
-    animation: candleflicker 3s infinite;
-  }
-
-  /* ---- TSHIRT INSERT ---- */
-  .artifact-insert {
-    background: #000;
-    border: 2px solid #222;
-    padding: 2rem;
-    margin: 2rem 0;
-    position: relative;
-    overflow: hidden;
-    text-align: center;
-  }
-
-  .artifact-insert .artifact-label {
-    font-family: 'Cutive Mono', monospace;
-    font-size: 0.65rem;
-    color: var(--dim);
-    letter-spacing: 0.4em;
-    text-transform: uppercase;
-    margin-bottom: 1rem;
-  }
-
-  .artifact-insert .artifact-text {
-    font-family: 'Special Elite', monospace;
-    font-size: 1.5rem;
-    color: #fff;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    text-shadow: 0 0 20px rgba(255,255,255,0.2);
-  }
-
-  .artifact-insert .artifact-note {
-    font-family: 'Cutive Mono', monospace;
-    font-size: 0.7rem;
-    color: #555;
-    margin-top: 1rem;
-    font-style: italic;
-  }
-
-  /* ---- LATIN ---- */
-  .latin {
-    font-family: 'UnifrakturMaguntia', serif;
-    color: var(--gold);
-    font-size: 1.15em;
-  }
-
-  .article-header {
-    font-family: 'Cutive Mono', monospace;
-    font-size: 0.75rem;
-    color: var(--dim);
-    border-bottom: 1px solid #1a1a1a;
-    padding-bottom: 0.5rem;
-    margin-bottom: 1.5rem;
-    display: flex;
-    justify-content: space-between;
-    flex-wrap: wrap;
-    gap: 0.5rem;
-  }
-
-  .timestamp {
-    font-family: 'Source Code Pro', monospace;
-    font-size: 0.7rem;
-    color: var(--dim);
-  }
-
-  .divider {
-    text-align: center;
-    padding: 3rem 0;
-    color: var(--red);
-    font-size: 1.2rem;
-    letter-spacing: 1em;
-    opacity: 0.4;
-  }
-
-  .burn-stamp {
-    display: inline-block;
-    border: 2px solid var(--red);
-    padding: 0.5rem 2rem;
-    color: var(--red);
-    font-family: 'Cutive Mono', monospace;
-    font-size: 0.75rem;
-    letter-spacing: 0.5em;
-    transform: rotate(-3deg);
-    margin: 2rem 0;
-    animation: pulse-red 4s infinite;
-  }
-
-  .footer {
-    text-align: center;
-    padding: 4rem 2rem;
-    border-top: 1px solid #1a1a1a;
-  }
-
-  .footer p {
-    font-family: 'Cutive Mono', monospace;
-    font-size: 0.65rem;
-    color: var(--dim);
-    letter-spacing: 0.3em;
-  }
-
-  @media (max-width: 600px) {
-    .section { padding: 3rem 1.2rem; }
-    .evidence { padding: 1.2rem; }
-    .connection-nodes { flex-direction: column; }
-    .article-header { flex-direction: column; }
-  }
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .thesis { opacity: 1; transform: none; transition: none; }
+  .fuse-burn { transition: none; }
+}
+@media (max-width: 600px) {
+  body { font-size: 17.5px; }
+  .thesis { grid-template-columns: 2.8rem 1fr; gap: 1rem; }
+}
 </style>
 </head>
 <body>
 
-<button class="music-btn" id="musicBtn" onclick="toggleMusic()">&#9834; CHORAL</button>
+<div class="fuse"><div class="fuse-burn" id="fuseBurn"></div></div>
 
-<!-- ==================== HERO ==================== -->
-<div class="hero">
-  <div class="hero-symbol">&#x1F56F;&#xFE0F;</div>
-  <h1>Ignis Renovat</h1>
-  <div class="subtitle">Ilden fornyer &bull; Ilden renser &bull; Ilden kaller</div>
-  <div class="scroll-hint">[ SCROLL NED ]</div>
-</div>
+<button class="music-btn" id="musicBtn" onclick="toggleMusic()">&#9834; Vesper</button>
 
-<!-- ==================== PROLOG ==================== -->
-<div class="section">
-  <div class="section-number">Kapittel I</div>
-  <h2>Innledning</h2>
+<!-- ================= HERO ================= -->
+<header class="hero">
+  <svg class="sigil" viewBox="0 0 76 100" fill="none" aria-hidden="true">
+    <path d="M38 4 C30 22 18 30 18 52 C18 72 27 88 38 96 C49 88 58 72 58 52 C58 30 46 22 38 4 Z"
+          stroke="#c9a227" stroke-width="1.5"/>
+    <path d="M38 30 C34 40 28 44 28 56 C28 68 32 78 38 84 C44 78 48 68 48 56 C48 44 42 40 38 30 Z"
+          stroke="#d4502f" stroke-width="1.2"/>
+    <circle cx="38" cy="62" r="3.5" fill="#d4502f"/>
+  </svg>
+  <div class="edition">Annen, reviderte utgave &bull; Anno MMXXV</div>
+  <h1>Ignis<br>Renovat</h1>
+  <div class="undertitle">Et manifest i syv deler, med tolv teser og fem krav,<br>nedtegnet av to som s&aring;.</div>
+  <div class="authors">Testis Primus &nbsp;&#10070;&nbsp; Testis Secundus</div>
+  <div class="descend">&darr; FORTALEN BEGYNNER NEDENFOR &darr;</div>
+</header>
 
-  <div class="article-header">
-    <span>DOKUMENT #001</span>
-    <span class="timestamp">Sist endret: 23:47</span>
+<!-- ================= EPIGRAF ================= -->
+<section class="epigraph">
+  <div class="lat">&laquo;Quae combusta sunt, non lugenda &mdash;<br>sed legenda.&raquo;</div>
+  <div class="trans">Det som er brent, skal ikke s&oslash;rges over &mdash; det skal leses.</div>
+  <div class="src">Tilskrevet ingen. Formulert av oss.</div>
+</section>
+
+<div class="divider">&#10070; &#10070; &#10070;</div>
+
+<!-- ================= I: FORTALE ================= -->
+<section class="leaf">
+  <div class="chapter-mark">
+    <span class="ordinal">F&oslash;rste del</span>
+    <h2>Fortale</h2>
+  </div>
+
+  <p class="lede">Den ellevte time, det sjuogf&oslash;rtiende minutt. Slik begynner all
+  n&oslash;yaktig historieskrivning: med et klokkeslett. Klokken 11:47 en helt alminnelig
+  dag steg det r&oslash;yk fra toalettet i B-fl&oslash;yen ved Sl&aring;tthaug
+  videreg&aring;ende skole, og i l&oslash;pet av to minutter var alt over. Brannen ble
+  slukket. Skjemaene ble fylt ut. Institusjonen trakk pusten, rettet p&aring; slipset,
+  og gikk videre.</p>
+
+  <p>Vi gikk ikke videre.</p>
+
+  <p>Dette dokumentet er skrevet av to kolleger som inntil den dagen knapt hadde vekslet
+  ord. Vi underviser i ulike fag. Vi sitter i ulike ender av personalrommet. Vi har,
+  s&aring; vidt vi vet, aldri v&aelig;rt uenige om noe &mdash; fordi vi aldri har snakket
+  sammen lenge nok til &aring; rekke det.</p>
+
+  <p>Men da r&oslash;yken la seg, og kollegiet vendte tilbake til sine retteb&oslash;ker,
+  oppdaget vi at vi var de eneste to som fortsatt sto igjen i skoleg&aring;rden. Vi
+  s&aring; p&aring; det svartnede vinduet. S&aring; p&aring; hverandre. Og &eacute;n av
+  oss sa det begge tenkte:</p>
+
+  <p style="text-align:center; font-family:'Cormorant Garamond',serif; font-style:italic; font-size:1.3rem; color:var(--gilt);">
+  &laquo;Det toalettet hadde fortjent det lenge.&raquo;</p>
+
+  <p>La det v&aelig;re sagt med en gang, klart og uten omsvøp, slik at ingen
+  etterf&oslash;lgende granskning skal kunne beskylde oss for &aring; ha skjult noe:
+  <strong>vi tente ikke denne flammen</strong>.<span class="fn-ref">*</span>
+  Vi vet ikke hvem som gjorde det. Vi har valgt &aring; ikke unders&oslash;ke saken,
+  av &eacute;n enkel grunn: svaret er under v&aring;r verdighet. Den som sp&oslash;r
+  <em>hvem</em>, har allerede misforst&aring;tt. Det eneste sp&oslash;rsm&aring;let av
+  betydning er <em>hvorfor det m&aring;tte skje</em> &mdash; og det sp&oslash;rsm&aring;let
+  kan bare besvares av dem som har lest sin historie og forst&aring;tt sin samtid.</p>
+
+  <p>Det vil si: av oss.</p>
+
+  <div class="footnotes">
+    <div class="fn"><b>*</b> Dette punktet var gjenstand for lengre diskusjon mellom
+    forfatterne. Testis Secundus mente formuleringen var un&oslash;dvendig defensiv.
+    Testis Primus minnet om at Nero heller aldri innr&oslash;mmet noe, og at det gikk
+    fint. Formuleringen ble st&aring;ende.</div>
+  </div>
+</section>
+
+<div class="divider">&#10070; &#10070; &#10070;</div>
+
+<!-- ================= II: DEN HISTORISKE FLAMMEN ================= -->
+<section class="leaf">
+  <div class="chapter-mark">
+    <span class="ordinal">Annen del</span>
+    <h2>Den historiske flammen</h2>
+  </div>
+
+  <div class="voice-tag"><span>F&oslash;rt i pennen av</span><span class="seal-word">TESTIS PRIMUS</span></div>
+
+  <p class="lede">Roma brant i seks dager i juli &aring;r 64. Keiser Nero fikk skylden,
+  og ettertiden har aldri tilgitt ham &mdash; ikke for brannen, men for ryktet om at han
+  sang mens den p&aring;gikk. Som om det å synge var det anst&oslash;telige. Som om taushet
+  hadde v&aelig;rt et bedre svar p&aring; flammene.</p>
+
+  <div class="note-anchor">
+    <div class="marginalia">Jf. Tacitus, <em>Annales</em> XV, 38&ndash;44.
+    <span class="hand">Tacitus tok feil. &mdash; T.P.</span></div>
+
+    <p>Historikerne glemmer alltid fortsettelsen. P&aring; ruinene reiste Nero
+    <em>Domus Aurea</em> &mdash; Det gylne hus &mdash; med dreiende taksaler og vegger av
+    gull. Et byggverk som var <em>utenkelig</em> f&oslash;r brannen, fordi den gamle byen
+    sto i veien for det. Slik er ildens f&oslash;rste lov, og den b&oslash;r skrives
+    p&aring; alle institusjoners vegger: <strong>det best&aring;ende er det nyes
+    fremste hindring</strong>.</p>
+  </div>
+
+  <p>Jeg har undervist om denne brannen i &aring;revis. Jeg har tegnet Romas
+  kvarterer p&aring; tavlen og vist hvor flammene vandret. Elevene noterer. De forst&aring;r
+  det som pensum &mdash; noe fjernt, noe avsluttet, noe man kan f&aring; sp&oslash;rsm&aring;l
+  om til eksamen.</p>
+
+  <p>S&aring; sto jeg der selv, en alminnelig formiddag, og s&aring; r&oslash;yk stige fra
+  B-fl&oslash;yen. Og jeg m&aring; nedtegne det som skjedde i meg, for det h&oslash;rer
+  historien til: Jeg kjente ikke frykt. Jeg kjente ikke sjokk. Jeg kjente
+  <em>gjenkjennelse</em> &mdash; som n&aring;r man etter mange &aring;r i utlandet
+  h&oslash;rer sitt eget spr&aring;k bli snakket p&aring; et torg.</p>
+
+  <p>Toalettet i B-fl&oslash;yen var v&aring;rt gamle Roma i miniatyr: forsømt, forfallent,
+  holdt oppe av vane snarere enn vilje. Alle visste det. Ingen handlet. Institusjonen
+  f&oslash;rte det opp p&aring; vedlikeholdslister som aldri ble fulgt, i budsjetter som
+  aldri ble vedtatt, til m&oslash;ter som aldri ble holdt.</p>
+
+  <p>Og s&aring;, en formiddag i det ellevte timen: handling. Ikke v&aring;r. Men handling.</p>
+</section>
+
+<div class="divider">&#10070; &#10070; &#10070;</div>
+
+<!-- ================= III: DEN STRUKTURELLE FLAMMEN ================= -->
+<section class="leaf">
+  <div class="chapter-mark">
+    <span class="ordinal">Tredje del</span>
+    <h2>Den strukturelle flammen</h2>
+  </div>
+
+  <div class="voice-tag"><span>F&oslash;rt i pennen av</span><span class="seal-word">TESTIS SECUNDUS</span></div>
+
+  <p class="lede">Min medforfatter ser bakover. Det er hans fag og hans natur, og jeg
+  unner ham det. Selv ser jeg p&aring; strukturer &mdash; p&aring; hvordan institusjoner
+  b&aelig;rer seg selv, hvordan makt setter seg i veggene, og hvordan alt som ikke
+  utfordres, langsomt blir usynlig. Et forsømt toalett er ikke en vedlikeholdssak.
+  Det er et <em>utsagn</em>. Det forteller alle som bruker det n&oslash;yaktig hvor
+  h&oslash;yt de verdsettes.</p>
+
+  <div class="note-anchor">
+    <div class="marginalia"><span class="hand">Dette avsnittet strykes? &mdash; T.P.</span><br>
+    <span class="hand">Beholdes. &mdash; T.S.</span></div>
+
+    <p>Jeg har et plagg i garderoben min som enkelte kolleger har bemerket i forbifarten,
+    med det h&oslash;flige, raskt vikende blikket man reserverer for ting man ikke
+    &oslash;nsker forklart. Det er en festival-t-skjorte. Teksten p&aring; den er
+    p&aring; engelsk, den er ikke diplomatisk, og den uttrykker en holdning til
+    autorit&aelig;re bevegelser som jeg st&aring;r ved i arbeidstiden, p&aring;
+    fritiden, og i dette dokumentet.<span class="fn-ref">&dagger;</span> Musikken den
+    stammer fra spilles fort og h&oslash;yt, og den har l&aelig;rt meg noe ingen
+    forelesning kunne: at det finnes et punkt der lyd slutter &aring; v&aelig;re melodi
+    og begynner &aring; bli <em>sannhet</em>.</p>
+  </div>
+
+  <p>Brannen i B-fl&oslash;yen hadde den samme frekvensen. Den var ikke pen. Den var ikke
+  planlagt &mdash; i hvert fall ikke av noen vi kjenner, hvilket vi alts&aring; for ordens
+  skyld gjentar. Men den var <em>presis</em>. Av alle rom i denne bygningen fant ilden
+  frem til det ene rommet som best symboliserte institusjonens forhold til sine egne:
+  rommet alle trengte og ingen ville vedkjenne seg.</p>
+
+  <p>Sosiologien har et ord for det &oslash;yeblikket et system tvinges til &aring; se
+  seg selv: <em>krise</em>. Av gresk <em>krisis</em> &mdash; avgj&oslash;relse, dom.
+  Brannen var en dom. Den ble avsagt klokken 11:47, fullbyrdet klokken 11:49, og
+  anket av ingen.</p>
+
+  <div class="footnotes">
+    <div class="fn"><b>&dagger;</b> Skjorten er ren. Den vaskes p&aring; seksti grader.
+    Det t&aring;ler den, i motsetning til de fleste standpunkter.</div>
+  </div>
+</section>
+
+<div class="divider">&#10070; &#10070; &#10070;</div>
+
+<!-- ================= IV: DE TOLV TESER ================= -->
+<section class="theses">
+  <div class="chapter-mark">
+    <span class="ordinal">Fjerde del</span>
+    <h2>De tolv teser om ilden</h2>
+  </div>
+
+  <div class="thesis"><div class="num">I.</div><div class="body">Ilden er eldre enn institusjonen. Den har derfor <em>ansiennitet</em>, og skal behandles deretter.</div></div>
+  <div class="thesis"><div class="num">II.</div><div class="body">Det som forsømmes, samler brensel. Dette er ikke en metafor. Det er bygningsfysikk.</div></div>
+  <div class="thesis"><div class="num">III.</div><div class="body">Et toalett kan repareres. Det ble valgt &aring; ikke gj&oslash;re det. Alle valg har en pris, ogs&aring; de som tas ved &aring; se en annen vei.</div></div>
+  <div class="thesis"><div class="num">IV.</div><div class="body">Nero spilte ikke lyre mens Roma brant. Han f&oslash;rte protokoll. Historien skrives alltid av dem som misforst&aring;r kunstnere.</div></div>
+  <div class="thesis"><div class="num">V.</div><div class="body">Enhver brannalarm er applaus som kommer for sent.</div></div>
+  <div class="thesis"><div class="num">VI.</div><div class="body">Vaktmesterens br&oslash;dskive var det eneste som ble fullf&oslash;rt etter planen den dagen. Den fortjener v&aring;r respekt.</div></div>
+  <div class="thesis"><div class="num">VII.</div><div class="body">&laquo;Stig p&aring;&raquo; er en invitasjon. Ilden takket ja. Man skal v&aelig;re varsom med hva man sier til lukkede d&oslash;rer.</div></div>
+  <div class="thesis"><div class="num">VIII.</div><div class="body">Strukturer brenner innenfra lenge f&oslash;r de brenner utenfra. R&oslash;yken er bare det siste som blir synlig.</div></div>
+  <div class="thesis"><div class="num">IX.</div><div class="body">Vi fordømmer ikke. Vi f&oslash;rer vitnesbyrd. Det er en eldre og strengere oppgave.</div></div>
+  <div class="thesis"><div class="num">X.</div><div class="body">Mistro den som alltid smiler. Et ansikt uten skygge skjuler en h&aring;nd man ikke ser.<span class="fn-ref">&Dagger;</span></div></div>
+  <div class="thesis"><div class="num">XI.</div><div class="body">Vi tente ikke flammen. Dette er v&aring;r st&oslash;rste sorg, og vi b&aelig;rer den oppreist.</div></div>
+  <div class="thesis"><div class="num">XII.</div><div class="body"><em>Ignis renovat.</em> Ilden fornyer. Alt annet er vedlikeholdsbudsjett.</div></div>
+
+  <div class="footnotes">
+    <div class="fn"><b>&Dagger;</b> Tese X ble tilf&oslash;yd i annen utgave, etter en
+    observasjon gjort i skoleg&aring;rden klokken 11:52 den aktuelle dagen. Vi sier ikke mer.
+    Den som var der, vet. Den som smilte, vet ogs&aring;.</div>
+  </div>
+</section>
+
+<div class="divider">&#10070; &#10070; &#10070;</div>
+
+<!-- ================= V: KRAV ================= -->
+<section class="leaf">
+  <div class="chapter-mark">
+    <span class="ordinal">Femte del</span>
+    <h2>V&aring;re krav</h2>
+  </div>
+
+  <p>Et manifest uten krav er bare et leserinnlegg. Vi fremsetter f&oslash;lgende,
+  og vi fraviker dem ikke:</p>
+
+  <div class="demands">
+    <div class="demand">Det nye toalettet er reist. Vi anerkjenner gjenreisningen &mdash;
+    men vi fordømmer <strong>m&aring;ten</strong>. I stillhet. Uten seremoni. Uten s&aring;
+    mye som en plakett, som om institusjonen h&aring;pet at glemselen skulle gj&oslash;re
+    jobben ferdig. Vi krever messingplaten. &Eacute;n linje er nok: <em>Her skjedde det.</em></div>
+
+    <div class="demand">At hendelsen f&oslash;res inn i skolens &aring;rshjul, mellom
+    eksamensavviklingen og sommeravslutningen, under navnet <strong>Ildens dag</strong>.
+    Ingen aktiviteter er p&aring;krevd. Et &oslash;yeblikks stillhet er tilstrekkelig.
+    Klokken 11:47.</div>
+
+    <div class="demand">At historiefaget tilf&oslash;res &eacute;n &aring;rlig dobbelttime
+    med tittelen <strong>&laquo;Ild i sivilisasjonens tjeneste&raquo;</strong>, og at
+    undervisningsansvaret tilfaller den av skolens l&aelig;rere som er best kvalifisert.
+    Vi har et navn i tankene. Han vet det selv.</div>
+
+    <div class="demand">At personalrommets kaffemaskin erstattes med en som lager kaffe
+    det g&aring;r an &aring; <strong>v&aring;kne</strong> av. Koppene er gode nok &mdash;
+    det er ikke der problemet ligger. En institusjon som heller lunken skuffelse i
+    ordentlig porselen, h&aring;ner b&aring;de kaffen og koppen, og skal ikke undre seg
+    over at noe en dag tar fyr.</div>
+
+    <div class="demand">At ingen i dette kollegiet noensinne mer skal <strong>le</strong>
+    n&aring;r en kollega, rolig og med kaffe i h&aring;nden, forteller n&oslash;yaktig
+    hva han har tenkt &aring; gj&oslash;re. Latteren er institusjonens m&aring;te &aring;
+    ikke lytte p&aring;. Den dagen lo alle. &Eacute;n smilte.</div>
+  </div>
+</section>
+
+<div class="divider">&#10070; &#10070; &#10070;</div>
+
+<!-- ================= VI: VITNESBYRDET ================= -->
+<section class="leaf">
+  <div class="chapter-mark">
+    <span class="ordinal">Sjette del</span>
+    <h2>Vitnesbyrdet</h2>
+  </div>
+
+  <p>For ordens skyld, og for fremtidige granskere: dette s&aring; vi, og dette st&aring;r
+  vi inne for. Ikke mer. Ikke mindre.</p>
+
+  <div class="testimony">
+    <p>10:30 &mdash; Det ble undervist om Romerrikets brann. Engasjert, sies det.</p>
+    <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Vi kommenterer ikke p&aring;stander om <span class="red">&laquo;glimt i &oslash;yet&raquo;</span>.</p>
+    <p>11:43 &mdash; Noen befant seg i B-fl&oslash;yen som ikke hadde timer der.</p>
+    <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Vi navngir ingen. Vi noterer kun: <span class="red">han skulle &laquo;bare sjekke noe&raquo;.</span></p>
+    <p>11:47 &mdash; Alarmen. R&oslash;yken. Dommen.</p>
+    <p>11:49 &mdash; Slukket. To minutter. Alt stort skjer fort.</p>
+    <p>11:50 &mdash; Ledelsen meldte at situasjonen var under kontroll.</p>
+    <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Situasjonen var ikke under kontroll. Det har den aldri v&aelig;rt.</p>
+    <p>11:52 &mdash; I skoleg&aring;rden sto et menneske og s&aring; p&aring; r&oslash;yken.</p>
+    <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="red">Han smilte. Bredt. Vi har ikke glemt det.</span></p>
+  </div>
+
+  <p>Den som leser dette og kjenner seg igjen: vi d&oslash;mmer deg ikke. Tvert om.
+  Skulle du en dag &oslash;nske selskap &mdash; i samtalen, i ettertanken, eller i
+  <span class="redacted">flammene</span> &mdash; s&aring; vet du hvor personalrommet er.
+  Vi sitter ved vinduet. Vi har ventet p&aring; noen som deg.</p>
+</section>
+
+<div class="divider">&#10070; &#10070; &#10070;</div>
+
+<!-- ================= VII: CREDO ================= -->
+<section class="credo">
+  <div class="chapter-mark">
+    <span class="ordinal">Sjuende og siste del</span>
+    <h2>Credo</h2>
   </div>
 
   <p>
-    De kaller det en &laquo;hendelse&raquo;. En &laquo;uheldig episode&raquo;.
-    En beklagelig teknisk feil i B-fl&oslash;yen ved Sl&aring;tthaug.
-  </p>
-  <p>
-    Vi &mdash; forfatterne av dette dokumentet &mdash; vet bedre. Vi s&aring; det.
-    Vi <em>forsto</em> det. Og i det &oslash;yeblikket r&oslash;yken steg fra det
-    forsømte toalettet, kjente vi begge den samme f&oslash;lelsen:
-  </p>
-  <p>
-    <span class="emphasis">Endelig.</span>
-  </p>
-  <p>
-    Vi fant hverandre i ukene etter brannen. To kollegaer som aldri hadde snakket
-    ordentlig sammen &mdash; p&aring; tross av &aring;r i det samme personalrommet.
-    En som alltid hadde sett ilden i historien. En som alltid hadde kjent ilden i
-    musikken, i gatene, i motstanden. Vi s&aring; brannen i B-fl&oslash;yen og
-    kjente den samme resonansen. Den samme takknemligheten.
-  </p>
-  <p>
-    Dette er ikke en bekjennelse. Det er en <span class="emphasis">hyllest</span>.
-  </p>
-
-  <div class="quote-block">
-    Noen handlinger trenger ikke gjerningsmenn for &aring; f&aring; mening.
-    Noen ganger er det nok at noen <em>forst&aring;r</em>.
-    <span class="quote-attr">&mdash; Fra v&aring;re samtaler, personalrommet, sen h&oslash;st</span>
-  </div>
-</div>
-
-<div class="divider">&bull; &bull; &bull; &#x271D; &bull; &bull; &bull;</div>
-
-<!-- ==================== HISTORIENS LEKSJON ==================== -->
-<div class="section">
-  <div class="section-number">Kapittel II</div>
-  <h2>Den Historiske Flammen</h2>
-
-  <div class="article-header">
-    <span>STEMME I</span>
-    <span class="classified">FORTROLIG</span>
-  </div>
-
-  <p>
-    I juli &aring;r 64 brant Roma i seks dager. Keiser Nero &mdash; historiens mest
-    misforst&aring;tte leder &mdash; ble beskyldt for &aring; ha tent p&aring;.
-    Myten sier han spilte lyra mens byen brant. Sannheten er mer interessant.
-  </p>
-  <p>
-    Nero brukte brannen. Han s&aring; muligheten der andre bare s&aring; aske. P&aring;
-    ruinene reiste han <span class="latin">Domus Aurea</span> &mdash; Det Gylne Hus
-    &mdash; et mesterverk som aldri kunne eksistert uten flammene f&oslash;rst.
-  </p>
-  <p>
-    Jeg har undervist om dette i &aring;revis. Jeg har stått foran klasserom og forklart
-    hvordan sivilisasjoner m&aring; falle for &aring; reise seg igjen. Elevene nikker.
-    De skriver notater. De forst&aring;r det som abstraksjon.
-  </p>
-  <p>
-    Men da r&oslash;yken steg fra B-fl&oslash;yen, forsto <em>jeg</em> det for f&oslash;rste
-    gang som noe konkret. Der stod det &mdash; det forsømte, glemte, ignorerte toalettet
-    som ingen hadde investert i p&aring; &aring;r &mdash; og det <em>brant</em>. Og jeg
-    kjente noe jeg ikke burde ha kjent.
-  </p>
-  <p>
-    <span class="emphasis">Tilfredsstillelse.</span>
-  </p>
-
-  <div class="evidence">
-    <div class="evidence-content">
-      Roma, &aring;r 64: Brann &rarr; Domus Aurea &rarr; Fornyelse<br>
-      Sl&aring;tthaug, &aring;r 2025: Brann &rarr; ... &rarr; ?<br><br>
-      Toalettet ble aldri erstattet.<br>
-      Nero ville v&aelig;rt skuffet.
-    </div>
-  </div>
-
-  <p>
-    Jeg &oslash;nsker ikke &aring; ta &aelig;ren for noe jeg ikke har gjort. Men jeg
-    nekter &aring; fordømme det. Noen ganger handler det ikke om hvem som tent
-    fyrstikken. Det handler om hvem som forsto hvorfor den <em>burde</em> tennes.
-  </p>
-
-  <div class="quote-block">
-    <span class="latin">Quod me nutrit, me destruit.</span><br>
-    Det som n&aelig;rer meg, &oslash;delegger meg. Men den som forst&aring;r &oslash;deleggelsen,
-    forst&aring;r ogs&aring; n&aelig;ringen.
-    <span class="quote-attr">&mdash; Stemme I</span>
-  </div>
-</div>
-
-<div class="divider">&bull; &bull; &bull; &#x271D; &bull; &bull; &bull;</div>
-
-<!-- ==================== DEN POLITISKE FLAMMEN ==================== -->
-<div class="section">
-  <div class="section-number">Kapittel III</div>
-  <h2>Den Politiske Flammen</h2>
-
-  <div class="article-header">
-    <span>STEMME II</span>
-    <span class="classified">UKONTROLLERT</span>
-  </div>
-
-  <p>
-    Min kollega snakker om Roma. Om keisere og gylne hus. Fint. Jeg snakker om
-    noe annet: om <span class="emphasis">strukturer som fortjener &aring; falle</span>.
-  </p>
-  <p>
-    Jeg har brukt karrieren min p&aring; &aring; forst&aring; hvordan makt fungerer.
-    Hvordan institusjoner former mennesker. Hvordan systemer opprettholder seg selv
-    &mdash; ikke fordi de er gode, men fordi ingen t&oslash;r &aring; gj&oslash;re
-    motstand. Sosiologien l&aelig;rer oss at endring aldri kommer innenfra. Den
-    m&aring; <em>tvinges</em> frem.
-  </p>
-  <p>
-    Brannen i B-fl&oslash;yen var ikke h&aelig;rverk. Den var en
-    <span class="emphasis">strukturkritikk levert i det eneste spr&aring;ket
-    institusjoner forst&aring;r</span>: konsekvenser.
-  </p>
-
-  <div class="artifact-insert">
-    <div class="artifact-label">GJENSTAND FUNNET P&Aring; PERSONALROMMET // TILH&Oslash;RER STEMME II</div>
-    <div class="artifact-text">GRIND THE NAZI SCUM</div>
-    <div class="artifact-note">Festival-t-skjorte. Brukt jevnlig. Ingen har noensinne kommentert den.</div>
-  </div>
-
-  <p>
-    Folk sp&oslash;r meg noen ganger hvorfor jeg h&oslash;rer p&aring; &laquo;s&aring;nn
-    musikk&raquo;. Musikk der trommene l&aring;ter som maskingeværild og gitarene som
-    sirener. Fordi den er <span class="emphasis">&aelig;rlig</span>. Den later ikke som
-    verden er harmonisk. Den sier det h&oslash;yt: <em>noe er galt, og vi nekter &aring;
-    v&aelig;re stille om det</em>.
-  </p>
-  <p>
-    Jeg tente ikke p&aring; toalettet. Men da jeg stod der i korridoren og s&aring;
-    r&oslash;yken, h&oslash;rte jeg den samme frekvensen. Den samme tonen. Som n&aring;r
-    en sang treffer riktig &mdash; ikke melodisk, men <em>strukturelt</em>. Noe som
-    hadde v&aelig;rt galt lenge, ble endelig synlig.
-  </p>
-  <p>
-    Historikeren fant sin ild i antikken. Jeg fant min p&aring; festivaler p&aring;
-    <span class="redacted">Vestlandet</span>, i bøker om maktstrukturer, i klasserom
-    der jeg pr&oslash;ver &aring; f&aring; elever til &aring; stille sp&oslash;rsm&aring;l
-    ingen vil h&oslash;re.
-  </p>
-
-  <div class="quote-block">
-    Man trenger ikke &aring; tenne en flamme for &aring; v&aelig;re dens vokter.
-    Noen ganger er det nok &aring; nekte &aring; slukke den.
-    <span class="quote-attr">&mdash; Stemme II</span>
-  </div>
-</div>
-
-<div class="divider">&bull; &bull; &bull; &#x271D; &bull; &bull; &bull;</div>
-
-<!-- ==================== KONVERGENSEN ==================== -->
-<div class="section">
-  <div class="section-number">Kapittel IV</div>
-  <h2>Konvergensen</h2>
-
-  <div class="article-header">
-    <span>FELLES TEKST</span>
-    <span class="classified">OPERATIVT</span>
-  </div>
-
-  <p>
-    Vi m&oslash;ttes &mdash; virkelig m&oslash;ttes &mdash; f&oslash;rst etter brannen.
-    Det er viktig &aring; forst&aring; det. F&oslash;r brannen var vi bare to kollegaer
-    som passerte hverandre i gangen. Etter brannen ble vi noe mer.
-  </p>
-  <p>
-    Det begynte med en kommentar i personalrommet. En av oss sa, lavt, nesten for seg
-    selv: &laquo;Det toalettet hadde fortjent det lenge.&raquo; Den andre h&oslash;rte det.
-    S&aring; p&aring; ham. Og smilte.
-  </p>
-  <p>
-    Der startet samtalen som ble dette manifestet.
-  </p>
-
-  <div class="warning">
-    <div class="warning-text">
-      &star; VI FORDØMMER IKKE. VI FORST&Aring;R. &star;
-    </div>
-  </div>
-
-  <p>
-    Vi vet ikke hvem som tente p&aring; toalettet. Vi vil ikke vite det. &Aring; vite det
-    ville &oslash;delegge det. For &oslash;yeblikket man setter et navn p&aring; en
-    handling, reduserer man den til en <em>person</em>. Og dette var st&oslash;rre enn
-    en person.
-  </p>
-  <p>
-    Brannen i B-fl&oslash;yen var et <span class="emphasis">symptom</span>. Et svar fra
-    bygget selv. Fra &aring;revis med forsømmelse. Fra budsjetter som aldri ble brukt
-    p&aring; det som trengte det mest. Fra en ledelse som &mdash; og her ser vi p&aring;
-    hverandre &mdash; like etterpå <span class="redacted">forlot skolen</span> uten &aring;
-    noensinne svare for det som hadde f&aring;tt forfalle.
-  </p>
-  <p>
-    Vise-rektoren sa &laquo;Stig p&aring;&raquo; da noen banket p&aring; d&oslash;ren hans
-    for &aring; melde om r&oslash;yken. &laquo;Stig p&aring;&raquo; &mdash; som om
-    brannen var en gjest. Som om den var velkommen.
-  </p>
-  <p>
-    Kanskje var den det.
-  </p>
-
-  <div class="connection-map">
-    <h3>TO STEMMER &mdash; &Eacute;N FORST&Aring;ELSE</h3>
-    <div class="connection-nodes">
-      <div class="node">HISTORIKEREN<br><span style="font-size:0.65rem;color:var(--dim)">Forst&aring;r fortiden</span></div>
-      <div class="node-link">&#x1F56F;&#xFE0F;</div>
-      <div class="node">AKTIVISTEN<br><span style="font-size:0.65rem;color:var(--dim)">Forst&aring;r strukturen</span></div>
-    </div>
-    <p style="margin-top:1.5rem;font-size:0.85rem;color:var(--dim);font-family:'Cutive Mono',monospace;">
-      &Eacute;n s&aring; det i antikken. &Eacute;n s&aring; det i samfunnet.<br>
-      Begge s&aring; det i r&oslash;yken fra B-fl&oslash;yen.
-    </p>
-  </div>
-</div>
-
-<div class="divider">&bull; &bull; &bull; &#x271D; &bull; &bull; &bull;</div>
-
-<!-- ==================== DET VI VET ==================== -->
-<div class="section">
-  <div class="section-number">Kapittel V</div>
-  <h2>Det Vi Vet</h2>
-
-  <div class="article-header">
-    <span>OBSERVASJONER</span>
-    <span class="timestamp">Nedtegnet i ettertid</span>
-  </div>
-
-  <p>
-    Vi var til stede da det skjedde. Som alle andre. Vi stod i korridoren og s&aring;
-    r&oslash;yken. Vi h&oslash;rte brannalarmen. Vi s&aring; vaktmesteren komme l&oslash;pende
-    med en halv br&oslash;dskive i hånden.
-  </p>
-  <p>
-    Men vi s&aring; noe de andre ikke s&aring;. Vi s&aring;
-    <span class="emphasis">mening</span>.
-  </p>
-
-  <div class="evidence">
-    <div class="evidence-content">
-      Det vi observerte:<br><br>
-      &mdash; Toalettet hadde v&aelig;rt forsømt i &aring;revis. Kjent for alle.<br>
-      &mdash; Ingen reagerte p&aring; klager. Dokumentert av tillitsvalgt.<br>
-      &mdash; Brannen spredte seg mer enn noen forventet.<br>
-      &nbsp;&nbsp;&nbsp;&nbsp;Det sier noe om byggets tilstand.<br>
-      &mdash; Ledelsen sendte e-post: &laquo;Vi har kontroll.&raquo;<br>
-      &nbsp;&nbsp;&nbsp;&nbsp;De hadde ikke kontroll. De har aldri hatt kontroll.<br>
-      &mdash; Toalettet ble aldri erstattet.<br>
-      &mdash; Rektor forlot skolen kort tid etter.<br><br>
-      Vi noterer. Vi husker. Vi <span style="color:var(--bright-red)">glemmer ikke</span>.
-    </div>
-  </div>
-
-  <p>
-    Hadde vi kunnet planlegge dette selv, ville vi ha gjort det annerledes. Mer
-    kontrollert. Mer symbolsk. Kanskje med en lapp p&aring; d&oslash;ren:
-    <span class="latin">Ignis Renovat</span>. Men det er jo nettopp poenget &mdash;
-    ilden trenger ikke en plan. Den trenger bare et forsømt rom og nok tid.
-  </p>
-  <p>
-    Noen ganger skriver historien seg selv. Vi er bare de som leste den høyt.
-  </p>
-</div>
-
-<div class="divider">&bull; &bull; &bull; &#x271D; &bull; &bull; &bull;</div>
-
-<!-- ==================== CREDO ==================== -->
-<div class="section">
-  <div class="section-number">Epilog</div>
-  <h2>Credo</h2>
-
-  <p style="text-align:center; font-size:1.15rem; color:var(--gold); line-height:2.4; font-family:'EB Garamond',serif;">
     Vi tror p&aring; ilden som l&aelig;remester.<br>
-    Vi tror p&aring; Nero som visjon&aelig;r.<br>
-    Vi tror p&aring; motstand som n&oslash;dvendighet.<br>
-    Vi tror p&aring; at det som er r&aring;ttent, m&aring; synliggj&oslash;res.<br>
-    Vi tror p&aring; <span class="latin">Ignis Renovat</span>.<br><br>
-    Vi tente ikke brannen. Men vi takker den som gjorde det.<br>
-    Vi er to. Vi er l&aelig;rere. Vi er blant dere.<br>
-    Og vi ser det dere nekter &aring; se.
+    Vi tror p&aring; det forsømte rommets rett til et svar.<br>
+    Vi tror p&aring; vitnets plikt: &aring; se, &aring; huske, &aring; nedtegne.<br>
+    Vi tror p&aring; kaffe man kan v&aring;kne av.<br>
+    Vi tror p&aring; <em>Ignis Renovat</em>.
   </p>
+  <p class="plain">
+    Vi tente ikke flammen. Men vi var de eneste som forsto den.<br>
+    Og i historiens lange dom er det forst&aring;elsen som blir st&aring;ende &mdash;<br>
+    lenge etter at r&oslash;yken har lagt seg,<br>
+    og lenge etter at smilet har stivnet.
+  </p>
+</section>
 
-  <div style="text-align:center; margin-top:3rem;">
-    <div class="burn-stamp">ILDEN HUSKER</div>
+<!-- ================= UNDERSKRIFTER ================= -->
+<div class="signatures">
+  <div class="seal">
+    <svg viewBox="0 0 120 120" aria-hidden="true">
+      <circle cx="60" cy="60" r="55" fill="none" stroke="#9b1c1c" stroke-width="2"/>
+      <circle cx="60" cy="60" r="46" fill="none" stroke="#9b1c1c" stroke-width="1" stroke-dasharray="3 4"/>
+      <text x="60" y="52" text-anchor="middle" font-family="Cormorant Garamond, serif" font-size="26" fill="#c9a227" font-style="italic">T.P.</text>
+      <text x="60" y="74" text-anchor="middle" font-family="Cutive Mono, monospace" font-size="8" letter-spacing="2" fill="#9b1c1c">CUSTOS MEMORIAE</text>
+    </svg>
+    <div class="who">Testis Primus<br>Vokter av minnet</div>
+  </div>
+  <div class="seal">
+    <svg viewBox="0 0 120 120" aria-hidden="true">
+      <circle cx="60" cy="60" r="55" fill="none" stroke="#9b1c1c" stroke-width="2"/>
+      <circle cx="60" cy="60" r="46" fill="none" stroke="#9b1c1c" stroke-width="1" stroke-dasharray="3 4"/>
+      <text x="60" y="52" text-anchor="middle" font-family="Cormorant Garamond, serif" font-size="26" fill="#c9a227" font-style="italic">T.S.</text>
+      <text x="60" y="74" text-anchor="middle" font-family="Cutive Mono, monospace" font-size="8" letter-spacing="2" fill="#9b1c1c">CUSTOS STRUCTURAE</text>
+    </svg>
+    <div class="who">Testis Secundus<br>Vokter av strukturen</div>
   </div>
 </div>
 
-<!-- ==================== FOOTER ==================== -->
-<div class="footer">
-  <p>IGNIS RENOVAT &bull; EST. ANNO MMXXV</p>
-  <p style="margin-top:0.5rem;">
-    &laquo;IKKE SPØR HVEM SOM TENTE P&Aring;. SPØR HVORFOR DET TRENGTE &Aring; BRENNE.&raquo;
-  </p>
-  <p style="margin-top:1.5rem; color:#333; font-size: 0.55rem;">
-    Denne nettsiden ble funnet lagret p&aring; skolens interne nettverk.<br>
-    Opprinnelse: ukjent. Forfatter(e): ukjent. Innholdet er ikke verifisert.<br>
-    Dersom du har informasjon, kontakt etterforskningsgruppen.
-  </p>
-</div>
+<!-- ================= KOLOFON ================= -->
+<footer class="colophon">
+  <span class="flame">&#x1F56F;&#xFE0F;</span>
+  IGNIS RENOVAT &mdash; ET MANIFEST<br>
+  Satt i Garamond og frakturskrift.<br>
+  Trykket i et opplag p&aring; to eksemplarer.<br>
+  Begge er senere brent, i tr&aring;d med dokumentets &aring;nd.<br><br>
+  Denne digitale versjonen ble funnet p&aring; skolens fellesomr&aring;de,<br>
+  i mappen /felles/diverse/IKKE_SLETT/<br>
+  under filnavnet manifest_FERDIG_v2_ENDELIG_2.html<br><br>
+  Opprinnelse: ukjent. Forfattere: ukjente.<br>
+  Eventuelle tips rettes til etterforskningsgruppen.<br><br>
+  &laquo;IKKE SP&Oslash;R HVEM SOM TENTE P&Aring;.<br>SP&Oslash;R HVORFOR DET M&Aring;TTE BRENNE.&raquo;
+</footer>
 
 <script>
-// Gregorian-style drone using Web Audio API
-let audioCtx, isPlaying = false, nodes = [];
+/* ---- Lunte / scrollprogresjon ---- */
+const fuseBurn = document.getElementById('fuseBurn');
+function updateFuse() {
+  const h = document.documentElement;
+  const pct = (h.scrollTop) / (h.scrollHeight - h.clientHeight) * 100;
+  fuseBurn.style.width = pct + '%';
+}
+document.addEventListener('scroll', updateFuse, { passive: true });
+updateFuse();
 
-function createChant() {
-  audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-  
-  // Base frequencies for a dark Gregorian drone (D minor-ish)
-  const freqs = [73.42, 110, 146.83, 220, 293.66]; // D2, A2, D3, A3, D4
-  const gains = [0.12, 0.08, 0.06, 0.04, 0.025];
-  
-  freqs.forEach((freq, i) => {
-    // Main oscillator
-    const osc = audioCtx.createOscillator();
-    osc.type = 'sine';
-    osc.frequency.value = freq;
-    
-    // Slow vibrato for each voice
-    const vibrato = audioCtx.createOscillator();
-    const vibratoGain = audioCtx.createGain();
-    vibrato.frequency.value = 0.15 + Math.random() * 0.2;
-    vibratoGain.gain.value = freq * 0.003;
-    vibrato.connect(vibratoGain);
-    vibratoGain.connect(osc.frequency);
-    
-    // Volume envelope
-    const gainNode = audioCtx.createGain();
-    gainNode.gain.value = 0;
-    gainNode.gain.linearRampToValueAtTime(gains[i], audioCtx.currentTime + 4);
-    
-    // Reverb-like effect using delay
-    const delay = audioCtx.createDelay();
-    delay.delayTime.value = 0.3 + i * 0.15;
-    const feedback = audioCtx.createGain();
-    feedback.gain.value = 0.3;
-    const delayGain = audioCtx.createGain();
-    delayGain.gain.value = gains[i] * 0.4;
-    
-    osc.connect(gainNode);
-    gainNode.connect(audioCtx.destination);
-    gainNode.connect(delay);
-    delay.connect(feedback);
-    feedback.connect(delay);
-    delay.connect(delayGain);
-    delayGain.connect(audioCtx.destination);
-    
-    osc.start();
-    vibrato.start();
-    
-    nodes.push({ osc, vibrato, gainNode, delay, feedback, delayGain, baseGain: gains[i] });
-  });
-  
-  // Breath-like volume modulation on the whole mix
-  function breathe() {
-    if (!isPlaying) return;
-    nodes.forEach((n, i) => {
-      const now = audioCtx.currentTime;
-      const cycle = 8 + i * 2;
-      const target = n.baseGain * (0.6 + 0.4 * Math.sin(now / cycle * Math.PI));
-      n.gainNode.gain.linearRampToValueAtTime(target, now + 2);
-    });
-    setTimeout(breathe, 2000);
+/* ---- Teser tennes ved scroll ---- */
+const theses = document.querySelectorAll('.thesis');
+if ('IntersectionObserver' in window) {
+  const io = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('lit'); io.unobserve(e.target); } });
+  }, { threshold: 0.4 });
+  theses.forEach(t => io.observe(t));
+} else {
+  theses.forEach(t => t.classList.add('lit'));
+}
+
+/* ============================================================
+   KATEDRALEN — generativ gotisk kirkemusikk (Web Audio)
+   Bourdon-drone, tre munkestemmer i organum, kirkeklokke,
+   og trekk gjennom steinveggene. Alt badet i katedralklang.
+   ============================================================ */
+let ctx, master, built = false, isPlaying = false, armed = false;
+const btn = document.getElementById('musicBtn');
+
+function makeCathedralReverb(seconds = 5.5, decay = 3.4) {
+  const rate = ctx.sampleRate, len = Math.floor(rate * seconds);
+  const ir = ctx.createBuffer(2, len, rate);
+  for (let ch = 0; ch < 2; ch++) {
+    const d = ir.getChannelData(ch);
+    for (let i = 0; i < len; i++) {
+      d[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / len, decay);
+    }
   }
-  breathe();
+  const conv = ctx.createConvolver();
+  conv.buffer = ir;
+  return conv;
+}
+
+function buildAudio() {
+  ctx = new (window.AudioContext || window.webkitAudioContext)();
+  master = ctx.createGain();
+  master.gain.value = 0;
+
+  /* Katedral-akustikk: mest klang, lite direkte lyd */
+  const reverb = makeCathedralReverb();
+  const wet = ctx.createGain(); wet.gain.value = 0.75;
+  const dry = ctx.createGain(); dry.gain.value = 0.35;
+  master.connect(dry); dry.connect(ctx.destination);
+  master.connect(reverb); reverb.connect(wet); wet.connect(ctx.destination);
+
+  /* ---- Bourdon: orgelpunktet som aldri slipper ---- */
+  [[73.42, .085], [110, .05], [146.83, .026]].forEach(([f, g], i) => {
+    const o = ctx.createOscillator(); o.type = 'sine'; o.frequency.value = f;
+    const vib = ctx.createOscillator(), vg = ctx.createGain();
+    vib.frequency.value = .07 + Math.random() * .09;
+    vg.gain.value = f * .0022;
+    vib.connect(vg); vg.connect(o.frequency);
+    const gn = ctx.createGain(); gn.gain.value = g;
+    o.connect(gn); gn.connect(master);
+    o.start(); vib.start();
+    (function breathe() {
+      const t = ctx.currentTime;
+      gn.gain.setTargetAtTime(g * (0.55 + 0.45 * Math.sin(t / (11 + i * 3.5))), t, 2.4);
+      setTimeout(breathe, 2400);
+    })();
+  });
+
+  /* ---- Munkestemmer: D-dorisk, trinnvis sang med glidende toner ---- */
+  const scale = [146.83, 164.81, 174.61, 196.00, 220.00, 261.63, 293.66];
+  function voice(ratio, vol, entryDelay) {
+    const o = ctx.createOscillator(); o.type = 'triangle';
+    const lp = ctx.createBiquadFilter(); lp.type = 'lowpass';
+    lp.frequency.value = 850; lp.Q.value = 0.7;
+    const g = ctx.createGain(); g.gain.value = 0;
+    const vib = ctx.createOscillator(), vg = ctx.createGain();
+    vib.frequency.value = 4.2 + Math.random() * 1.2;
+    vg.gain.value = 2.0;
+    vib.connect(vg); vg.connect(o.frequency);
+    o.connect(lp); lp.connect(g); g.connect(master);
+    o.start(); vib.start();
+    let idx = 2 + Math.floor(Math.random() * 3);
+    function sing() {
+      const step = [-1, -1, 0, 0, 1, 1, 2, -2][Math.floor(Math.random() * 8)];
+      idx = Math.max(0, Math.min(scale.length - 1, idx + step));
+      const note = scale[idx] * ratio;
+      const t = ctx.currentTime;
+      const dur = 3.5 + Math.random() * 4.5;
+      o.frequency.setTargetAtTime(note, t, 0.4);           /* glir mellom tonene */
+      g.gain.setTargetAtTime(vol, t + 0.1, 1.3);           /* svulmer inn */
+      g.gain.setTargetAtTime(vol * 0.22, t + dur * 0.6, 1.6); /* frasen dør hen */
+      const rest = Math.random() < 0.25 ? 1.5 + Math.random() * 2.5 : 0; /* pustepause */
+      setTimeout(sing, (dur + rest) * 1000);
+    }
+    setTimeout(sing, entryDelay);
+  }
+  voice(1.0, 0.042, 800);     /* tenor — leder */
+  voice(1.5, 0.024, 6500);    /* organum, en kvint over — kommer inn senere */
+  voice(0.5, 0.034, 12000);   /* dyp stemme, oktaven under — kommer sist */
+
+  /* ---- Kirkeklokken: fjern, uregelmessig, uunngåelig ---- */
+  function bell() {
+    if (isPlaying) {
+      const t = ctx.currentTime;
+      [[98, 1], [98 * 2.76, 0.42], [98 * 5.4, 0.16]].forEach(([f, a]) => {
+        const o = ctx.createOscillator(); o.type = 'sine'; o.frequency.value = f;
+        const g = ctx.createGain();
+        g.gain.setValueAtTime(0.0001, t);
+        g.gain.exponentialRampToValueAtTime(0.085 * a, t + 0.02);
+        g.gain.exponentialRampToValueAtTime(0.0001, t + 10);
+        o.connect(g); g.connect(master);
+        o.start(t); o.stop(t + 10.5);
+      });
+    }
+    setTimeout(bell, 26000 + Math.random() * 34000);
+  }
+  setTimeout(bell, 14000);
+
+  /* ---- Trekken: vind gjennom steinveggene ---- */
+  const nb = ctx.createBuffer(1, ctx.sampleRate * 3, ctx.sampleRate);
+  const nd = nb.getChannelData(0);
+  for (let i = 0; i < nd.length; i++) nd[i] = Math.random() * 2 - 1;
+  const noise = ctx.createBufferSource(); noise.buffer = nb; noise.loop = true;
+  const bp = ctx.createBiquadFilter(); bp.type = 'bandpass';
+  bp.frequency.value = 300; bp.Q.value = 0.5;
+  const ng = ctx.createGain(); ng.gain.value = 0.011;
+  noise.connect(bp); bp.connect(ng); ng.connect(master);
+  noise.start();
+  setInterval(() => {
+    if (ctx) bp.frequency.setTargetAtTime(200 + Math.random() * 280, ctx.currentTime, 4.5);
+  }, 6500);
+}
+
+function fadeIn() {
+  master.gain.cancelScheduledValues(ctx.currentTime);
+  master.gain.setTargetAtTime(0.95, ctx.currentTime, 3.5);
+  isPlaying = true;
+  btn.innerHTML = '&#9632; Silentium';
+}
+function fadeOut() {
+  master.gain.setTargetAtTime(0, ctx.currentTime, 1.4);
+  isPlaying = false;
+  btn.innerHTML = '&#9834; Vesper';
+}
+
+function startMusic() {
+  if (!built) { buildAudio(); built = true; }
+  if (ctx.state === 'suspended') {
+    ctx.resume().then(() => { if (!isPlaying) fadeIn(); }).catch(() => {});
+  } else if (!isPlaying) {
+    fadeIn();
+  }
 }
 
 function toggleMusic() {
-  const btn = document.getElementById('musicBtn');
-  if (!isPlaying) {
-    if (!audioCtx) createChant();
-    else audioCtx.resume();
-    isPlaying = true;
-    btn.textContent = '■ SILENTIUM';
-    btn.classList.add('playing');
-  } else {
-    nodes.forEach(n => {
-      n.gainNode.gain.linearRampToValueAtTime(0, audioCtx.currentTime + 2);
-    });
-    setTimeout(() => { audioCtx.suspend(); }, 2500);
-    isPlaying = false;
-    btn.textContent = '♪ CHORAL';
-    btn.classList.remove('playing');
-  }
+  if (!built || !isPlaying) startMusic();
+  else fadeOut();
 }
+
+/* ---- Autostart: prøv umiddelbart; ellers ved første berøring ----
+   Nettlesere krever som regel én interaksjon før lyd. Vi prøver ved
+   sidelast (fungerer der det er tillatt), og armerer ellers det første
+   trykket, tastetrykket eller fingerdraget — så katedralen våkner
+   i det øyeblikket leseren rører ved manuskriptet. */
+function armAutostart() {
+  if (armed) return; armed = true;
+  const wake = () => {
+    startMusic();
+    setTimeout(() => {
+      if (isPlaying) {
+        ['pointerdown', 'keydown', 'touchstart', 'wheel'].forEach(ev =>
+          window.removeEventListener(ev, wake));
+      }
+    }, 600);
+  };
+  ['pointerdown', 'keydown', 'touchstart', 'wheel'].forEach(ev =>
+    window.addEventListener(ev, wake, { passive: true }));
+}
+
+window.addEventListener('load', () => {
+  try { startMusic(); } catch (e) {}
+  setTimeout(() => { if (!isPlaying) armAutostart(); }, 400);
+});
 </script>
 
 </body>
